@@ -1,8 +1,6 @@
 // svg.filter.js 0.1 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
 ;(function() {
 
-
-
   SVG.Filter = function() {
     this.constructor.call(this, SVG.create('filter'))
   }
