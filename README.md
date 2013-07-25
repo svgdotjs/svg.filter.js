@@ -190,4 +190,4 @@ rect.filter(function(add) {
 
 
 ## Important
-This plugin is still under developemnt and does not yet cover the whole range of svg filter capabilities.
+This plugin is still under development and does not yet cover the whole range of svg filter capabilities.
