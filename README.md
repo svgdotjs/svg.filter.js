@@ -42,11 +42,15 @@ image.filter(function(add) {
 })
 ```
 
-### saturate
+### contrast
 
 ```javascript
 image.filter(function(add) {
-  add.colorMatrix('saturate', 2)
+  var amount = 1.5
+  
+  add.componentTransfer({
+    rgb: { type: 'linear', slope: amount, intercept: -(0.3 * amount) + 0.3 }
+  })
 })
 ```
 
