@@ -189,5 +189,49 @@ rect.filter(function(add) {
 ```
 
 
+## Furthermore
+Some more features you should know about.
+
+### unfilter
+The `unfilter` method removes the filter attribute from the node:
+
+```javascript
+image.unfilter()
+```
+
+This will return the element to its original state but will retain the filter in the defs node. If the filter node should be removed as well, simply pass the `true` as the first argument:
+
+```javascript
+image.unfilter(true)
+```
+
+
+### referencing the filter node
+An internal reference to the filter node is made in the element:
+
+```javascript
+image.filterer
+```
+
+This can also be very useful to reuse an existing filter on various elements:
+
+```javascript
+otherImage.filter(image.filterer)
+```
+
+### Animating filter values
+Every filter value can be animated as well:
+
+```javascript
+var hueRotate
+
+image.filter(function(add) {
+  hueRotate = add.colorMatrix('hueRotate', 0)
+})
+
+hueRotate.animate(3000).attr('values', 360)
+```
+
+
 ## Important
 This plugin is still under development and does not yet cover the whole range of svg filter capabilities.

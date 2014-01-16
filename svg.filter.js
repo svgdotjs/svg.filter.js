@@ -1,12 +1,13 @@
-// svg.filter.js 0.1 - Copyright (c) 2013 Wout Fierens - Licensed under the MIT license
+// svg.filter.js 0.2 - Copyright (c) 2014 Wout Fierens - Licensed under the MIT license
 ;(function() {
 
+  // Main filter class
   SVG.Filter = function() {
     this.constructor.call(this, SVG.create('filter'))
   }
 
   // Inherit from SVG.Container
-  SVG.Filter.prototype = new SVG.Container
+  SVG.Filter.prototype = new SVG.Parent
 
   //
   SVG.extend(SVG.Filter, {
@@ -153,13 +154,16 @@
       return this.filterer
     }
     // Remove filter
-  , unfilter: function() {
-      delete this.filterer
-      return this.attr('filter', null)
-    }
-    // Convencience blur
-  , blur: function(radius) {
+  , unfilter: function(remove) {
+      /* also remove the filter node */
+      if (this.filterer && remove === true)
+        this.filterer.remove()
 
+      /* delete reference to filterer */
+      delete this.filterer
+
+      /* remove filter attribute */
+      return this.attr('filter', null)
     }
 
   })
@@ -219,7 +223,8 @@
     }
 
     /* inherit from SVG.Effect */
-    SVG[name + 'Effect'].prototype = new SVG.Effect
+    SVG[name + 'Effect'].prototype = ['componentTransfer'].indexOf(name) > -1 ?
+      new SVG.Parent : new SVG.Effect
 
     /* make all effects interchainable */
     effects.forEach(function(e) {
@@ -250,6 +255,13 @@
     // implement flood-color and flood-opacity
   })
 
+  // Presets
+  SVG.filter = {
+    sepiatone:  [ .343, .669, .119, 0, 0 
+                , .249, .626, .130, 0, 0
+                , .172, .334, .111, 0, 0
+                , .000, .000, .000, 1, 0 ]
+  }
 
   // Helpers
   function normaliseMatrix(matrix) {

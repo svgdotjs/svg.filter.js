@@ -28,7 +28,7 @@ describe('Filter', function() {
   describe('alpha', function() {
     it('returns "SourceAlpha" string', function() {
       rect.filter(function(add) {
-        expect(add.alpha).toBe('SourceAlpha')
+        expect(add.sourceAlpha).toBe('SourceAlpha')
       })
     })
   })
