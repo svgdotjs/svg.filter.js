@@ -22,7 +22,7 @@ var image = draw.image('path/to/image.jpg').size(300, 300)
 
 ```javascript
 image.filter(function(add) {
-  add.gaussianBlur('30')
+  add.gaussianBlur(30)
 })
 ```
 
@@ -30,7 +30,7 @@ image.filter(function(add) {
 
 ```javascript
 image.filter(function(add) {
-  add.gaussianBlur('30 0')
+  add.gaussianBlur(30, 0)
 })
 ```
 
@@ -97,7 +97,7 @@ image.filter(function(add) {
 ```javascript
 image.filter(function(add) {
   add.componentTransfer({
-    rgb: { type: 'discrete', tableValues: '0 0.2 0.4 0.6 0.8 1' }
+    rgb: { type: 'discrete', tableValues: [0, 0.2, 0.4, 0.6, 0.8, 1] }
   })
 })
 ```
@@ -127,7 +127,7 @@ image.filter(function(add) {
 ```javascript
 image.filter(function(add) {
   add.componentTransfer({
-    rgb: { type: 'table', tableValues: '1 0' }
+    rgb: { type: 'table', tableValues: [1, 0] }
   })
 })
 ```
@@ -160,7 +160,7 @@ You will notice that all the effect descriptions have a drop shadow. Here is how
 var text = draw.text('SVG text with drop shadow').fill('#fff')
 
 text.filter(function(add) {
-  var blur = add.offset(0,1).in(add.sourceAlpha).gaussianBlur('1')
+  var blur = add.offset(0, 1).in(add.sourceAlpha).gaussianBlur(1)
 
   add.blend(add.source, blur)
 })
@@ -172,11 +172,12 @@ This technique can be achieved on any other shape of course:
 var rect = draw.rect(100,100).fill('#f09').stroke({ width: 3, color: '#0f9' }).move(10,10)
 
 rect.filter(function(add) {
-  var blur = add.offset(20,20).in(add.sourceAlpha).gaussianBlur('5')
+  var blur = add.offset(20, 20).in(add.sourceAlpha).gaussianBlur(5)
 
   add.blend(add.source, blur)
 
-}).size('150%','150%')
+  this.size('200%','200%').move('-50%', '-50%')
+})
 ```
 
 If the drop shadow should get the colour of the shape so it appears like coloured glass:
@@ -185,11 +186,12 @@ If the drop shadow should get the colour of the shape so it appears like coloure
 var rect = draw.rect(100,100).fill('#f09').stroke({ width: 3, color: '#0f9' }).move(10,10)
 
 rect.filter(function(add) {
-  var blur = add.offset(20,20).gaussianBlur('5')
+  var blur = add.offset(20, 20).gaussianBlur(5)
 
   add.blend(add.source, blur)
 
-}).size('150%','150%')
+  this.size('200%','200%').move('-50%', '-50%')
+})
 ```
 
 

@@ -1,4 +1,4 @@
-// svg.filter.js 0.2 - Copyright (c) 2014 Wout Fierens - Licensed under the MIT license
+// svg.filter.js 0.3 - Copyright (c) 2013-2014 Wout Fierens - Licensed under the MIT license
 ;(function() {
 
   // Main filter class
@@ -108,8 +108,8 @@
       // to be implemented
     }
     // Gaussian Blur effect
-  , gaussianBlur: function(deviation) {
-      return this.put(new SVG.GaussianBlurEffect).attr('stdDeviation', deviation)
+  , gaussianBlur: function() {
+      return this.put(new SVG.GaussianBlurEffect).attr('stdDeviation', listString(Array.prototype.slice.call(arguments)))
     }
     // Default string value
   , toString: function() {
@@ -126,7 +126,7 @@
       
       /* invoke passed block */
       if (typeof block === 'function')
-        block(filter)
+        block.call(filter, filter)
       
       return filter
     }
@@ -273,34 +273,14 @@
     return matrix.toString().replace(/^\s+/, '').replace(/\s+$/, '').replace(/\s+/g, ' ')
   }
 
-}).call(this)
+  function listString(list) {
+    if (!Array.isArray(list))
+      return list
 
+    for (var i = 0, l = list.length, s = []; i < l; i++)
+      s.push(list[i])
 
+    return s.join(' ')
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}).call(this);
