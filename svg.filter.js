@@ -1,4 +1,4 @@
-// svg.filter.js 0.3 - Copyright (c) 2013-2014 Wout Fierens - Licensed under the MIT license
+// svg.filter.js 0.4 - Copyright (c) 2013-2014 Wout Fierens - Licensed under the MIT license
 ;(function() {
 
   // Main filter class
@@ -143,7 +143,7 @@
   })
 
   //
-  SVG.extend(SVG.Element, {
+  SVG.extend(SVG.Element, SVG.G, SVG.Nested, {
     // Create filter element in defs and store reference
     filter: function(block) {
       this.filterer = block instanceof SVG.Element ?
