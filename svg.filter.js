@@ -113,7 +113,7 @@
     }
     // Default string value
   , toString: function() {
-      return 'url(#' + this.attr('id') + ')'
+      return 'url(' + window.location.href + '#' + this.attr('id') + ')'
     }
 
   })
