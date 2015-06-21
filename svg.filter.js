@@ -18,12 +18,14 @@
   , backgroundAlpha:  'BackgroundAlpha'
   , fill:             'FillPaint'
   , stroke:           'StrokePaint'
+
+  , autoSetIn: true
     // Custom put method for leaner code
   , put: function(element, i) {
       this.add(element, i)
 
       //dont set "in" if the element is parent
-      if(!(element instanceof SVG.Parent) && !element.attr('in')){
+      if(!(element instanceof SVG.Parent) && !element.attr('in') && this.autoSetIn){
         element.attr('in',this.source);
       }
       if(!element.attr('result')){
@@ -50,7 +52,7 @@
     }
     // Composite effect
   , composite: function(in1, in2, operator, attrs) {
-      return this.put(new SVG.CompositeEffect(in1,in2,operator));;
+      return this.put(new SVG.CompositeEffect(in1,in2,operator,attrs));;
     }
     // Flood effect
   , flood: function(color, attrs) {
@@ -71,6 +73,9 @@
     // Gaussian Blur effect
   , gaussianBlur: function() {
       return this.put(new (bindConstructor(SVG.GaussianBlurEffect,arguments)));
+    }
+  , morphology: function(operator,radius,attrs){
+      return this.put(new SVG.MorphologyEffect(operator,radius,attrs));
     }
   , custom: function(type,attrs,children){
       return this.put(new SVG.CustomEffect(type,attrs,children));
@@ -241,10 +246,10 @@
       for(var i = 0; i < arguments.length; i++){
         var node = arguments[i];
         if(node instanceof SVG.Element){
-          this.put(new SVG.CustomEffect('MergeNode',{in: node.attr('result')}));
+          this.add(new SVG.CustomEffect('MergeNode',{in: node.attr('result')}));
         }
         else if(typeof node == 'string'){
-          this.put(new SVG.CustomEffect('MergeNode',{in: node}));
+          this.add(new SVG.CustomEffect('MergeNode',{in: node}));
         }
       }
     },
@@ -257,8 +262,11 @@
     gaussianBlur: function(){
       this.attr('stdDeviation', listString(Array.prototype.slice.call(arguments)))
     },
-    morphology: function(){
-
+    morphology: function(operator,radius){
+      this.attr({
+        operator: operator,
+        radius: radius
+      });
     },
     specularLighting: function(){
 
@@ -331,7 +339,7 @@
       children = children || [];
       for(var i = 0; i < children.length; i++){
         if(children[i] instanceof SVG.Element){
-          this.put(children[i]);
+          this.add(children[i]);
         }
       }
     }
