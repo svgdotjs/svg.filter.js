@@ -97,27 +97,6 @@
   , turbulence: function(baseFrequency,numOctaves,seed,stitchTiles,type,attrs){
       return this.put(new (bindConstructor(SVG.TurbulenceEffect,arguments)) );
     }
-    //recolor
-  , addRecolor: function(color,opacity,attrs){
-      opacity = opacity || 0;
-      var c = new SVG.Color(color);
-      var r = c.r / 255,
-          g = c.g / 255,
-          b = c.b / 255;
-
-      /**
-       * r' 0 0 0 0 r   r 
-       * g' 0 0 0 0 g   g
-       * b' = 0 0 0 0 b . b
-       * a' 0 0 0 a 0   a
-       * 1          1
-       */
-      return this.put(new SVG.ColorMatrixEffect('matrix',"0 0 0 0 " + r + " 0 0 0 0 " + g + " 0 0 0 0 " + b + " 0 0 0 " + opacity + " 0 ",attrs));
-    }
-  , addStroke: function(size,color,opacity,attr){
-      attr = attr || {};
-      return this.morphology('dilate',size).in(attr.in || this.source).addRecolor(color || this.stroke,opacity || 1).merge(attr.in || this.source).attr('result',attr.result);
-    }
     // Default string value
   , toString: function() {
       return 'url(#' + this.attr('id') + ')'
@@ -219,12 +198,6 @@
     // Stringification
   , toString: function() {
       return this.result()
-    }
-  , addRecolor: function(){
-      return this.parent.addRecolor.apply(this.parent,arguments).in(this);
-    }
-  , addStroke: function(){
-      return this.parent.addStroke.apply(this.parent,arguments).in(this);
     }
 
   })
