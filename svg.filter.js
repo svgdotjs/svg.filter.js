@@ -46,7 +46,7 @@
       return this.put(new (bindConstructor(SVG.ConvolveMatrixEffect, arguments)) );
     }
     // ComponentTransfer effect
-  , componentTransfer: function(compontents,attrs) {
+  , componentTransfer: function(compontents, attrs) {
       return this.put(new (bindConstructor(SVG.ComponentTransferEffect, arguments)) );
     }
     // Composite effect
@@ -454,7 +454,7 @@
       else children = [];
 
       var attrs = arguments[arguments.length - 1];
-      if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype){ //make sure its a object and its prototype is Object
+      if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype && (name !== 'ComponentTransfer' || arguments.length > 1)){ //make sure its a object and its prototype is Object, and its not the object passed to componentTransfer
         Array.prototype.splice.call(arguments,arguments.length - 1, 1);
       }
       else attrs = {};
