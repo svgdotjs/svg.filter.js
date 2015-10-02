@@ -465,7 +465,13 @@
       //call constructor for this effect
       effect.apply(this,arguments);
 
+      //set the attrs
       this.attr(attrs);
+
+      //add the children
+      for (var i = 0; i < children.length; i++) {
+        this.add(children[i]);
+      };
     }
 
     /* inherit from SVG.Effect */
