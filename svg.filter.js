@@ -34,68 +34,69 @@
       return element;
     }
     // Blend effect
-  , blend: function(in1, in2, mode, attrs) {
-      return this.put(new (bindConstructor(SVG.BlendEffect,arguments)) );
+  , blend: function(in1, in2, mode) {
+      return this.put(new SVG.BlendEffect(in1, in2, mode) );
     }
     // ColorMatrix effect
-  , colorMatrix: function(type, values, attrs) {
-      return this.put(new (bindConstructor(SVG.ColorMatrixEffect, arguments)) );
+  , colorMatrix: function(type, values) {
+      return this.put(new SVG.ColorMatrixEffect(type, values));
     }
     // ConvolveMatrix effect
-  , convolveMatrix: function(matrix, attrs) {
-      return this.put(new (bindConstructor(SVG.ConvolveMatrixEffect, arguments)) );
+  , convolveMatrix: function(matrix) {
+      return this.put(new SVG.ConvolveMatrixEffect(matrix));
     }
     // ComponentTransfer effect
-  , componentTransfer: function(compontents, attrs) {
-      return this.put(new (bindConstructor(SVG.ComponentTransferEffect, arguments)) );
+  , componentTransfer: function(components) {
+      return this.put(new SVG.ComponentTransferEffect(components));
     }
     // Composite effect
-  , composite: function(in1, in2, operator, attrs) {
-      return this.put(new (bindConstructor(SVG.CompositeEffect, arguments)) );
+  , composite: function(in1, in2, operator) {
+      return this.put(new SVG.CompositeEffect(in1, in2, operator));
     }
     // Flood effect
-  , flood: function(color, attrs) {
-      return this.put(new (bindConstructor(SVG.FloodEffect, arguments)) );
+  , flood: function(color) {
+      return this.put(new SVG.FloodEffect(color));
     }
     // Offset effect
-  , offset: function(x, y, attrs) {
-      return this.put(new (bindConstructor(SVG.OffsetEffect, arguments)) );
+  , offset: function(x, y) {
+      return this.put(new SVG.OffsetEffect(x,y));
     }
     // Image effect
-  , image: function(src, attrs) {
-      return this.put(new (bindConstructor(SVG.ImageEffect, arguments)) );
+  , image: function(src) {
+      return this.put(new SVG.ImageEffect(src));
     }
     // Merge effect
   , merge: function() {
-      return this.put(new (bindConstructor(SVG.MergeEffect,arguments)) );
+      //pass the array of arguments to the constructor because we dont know if the user gave us an array as the first arguemnt or wether they listed the effects in the arguments
+      return this.put(new SVG.MergeEffect.bind.apply(SVG.MergeEffect,[undefined].concat(arguments)));
     }
     // Gaussian Blur effect
-  , gaussianBlur: function(x,y,attrs) {
-      return this.put(new (bindConstructor(SVG.GaussianBlurEffect,arguments)) );
+  , gaussianBlur: function(x,y) {
+      return this.put(new SVG.GaussianBlurEffect(x,y));
     }
     // Morphology effect
-  , morphology: function(operator,radius,attrs){
-      return this.put(new (bindConstructor(SVG.MorphologyEffect,arguments)) );
+  , morphology: function(operator,radius){
+      return this.put(new SVG.MorphologyEffect(operator,radius));
     }
     // DiffuseLighting effect
-  , diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength,attrs){
-      return this.put(new (bindConstructor(SVG.DiffuseLightingEffect,arguments)) );
+  , diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength){
+      return this.put(new SVG.DiffuseLightingEffect(surfaceScale,diffuseConstant,kernelUnitLength));
     }
     // DisplacementMap effect
-  , displacementMap: function(in1,in2,scale,xChannelSelector,yChannelSelector,attrs){
-      return this.put(new (bindConstructor(SVG.DisplacementMapEffect,arguments)) );
+  , displacementMap: function(in1,in2,scale,xChannelSelector,yChannelSelector){
+      return this.put(new SVG.DisplacementMapEffect(in1,in2,scale,xChannelSelector,yChannelSelector));
     }
     // SpecularLighting effect
-  , specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength,attrs){
-      return this.put(new (bindConstructor(SVG.SpecularLightingEffect,arguments)) );
+  , specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
+      return this.put(new SVG.SpecularLightingEffect(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength));
     }
     // Tile effect
   , tile: function(){
-      return this.put(new (bindConstructor(SVG.TileEffect,arguments)) );
+      return this.put(new SVG.TileEffect());
     }
     // Turbulence effect
-  , turbulence: function(baseFrequency,numOctaves,seed,stitchTiles,type,attrs){
-      return this.put(new (bindConstructor(SVG.TurbulenceEffect,arguments)) );
+  , turbulence: function(baseFrequency,numOctaves,seed,stitchTiles,type){
+      return this.put(new SVG.TurbulenceEffect(baseFrequency,numOctaves,seed,stitchTiles,type));
     }
     // Default string value
   , toString: function() {
@@ -109,14 +110,14 @@
     // Define filter
     filter: function(block) {
       var filter = this.put(new SVG.Filter)
-      
+
       /* invoke passed block */
       if (typeof block === 'function')
         block.call(filter, filter)
-      
+
       return filter
     }
-    
+
   })
 
   //
@@ -125,7 +126,7 @@
     filter: function(block) {
       return this.defs().filter(block)
     }
-    
+
   })
 
   //
@@ -193,7 +194,7 @@
     }
     // Named result
   , result: function() {
-      return this.attr('id') + 'Out'
+      return this.attr('result') || this.attr('id') + 'Out'
     }
     // Stringification
   , toString: function() {
@@ -268,7 +269,10 @@
       })
     },
     gaussianBlur: function(x,y){
-      this.attr('stdDeviation', listString(Array.prototype.slice.call(arguments)))
+      if(arguments.length > 0)
+        this.attr('stdDeviation', listString(Array.prototype.slice.call(arguments)))
+      else
+        this.attr('stdDeviation', '0 0')
     },
     morphology: function(operator,radius){
       this.attr({
@@ -293,9 +297,20 @@
   // Create all parent effects
   var parentEffects = {
     merge: function(){
+      var inputs;
+
+      //if the first argument is an array use it
+      if(typeof arguments[0] == 'object' && arguments[0].hasOwnProperty('length'))
+        inputs = arguments[0];
+      else
+        inputs = arguments;
+
       //add nodes
-      for(var i = 0; i < arguments.length; i++){
-        this.put(new SVG.MergeNode(arguments[i]));
+      for(var i = 0; i < inputs.length; i++){
+        if(inputs[i] instanceof SVG.MergeNode){
+          this.put(inputs[i]);
+        }
+        else this.put(new SVG.MergeNode(inputs[i]));
       }
     },
     componentTransfer: function(compontents){
@@ -324,7 +339,7 @@
 
           delete compontents.rgb
         }
-        
+
         /* set individual components */
         for (var c in compontents)
           this[c].attr(compontents[c])
@@ -410,11 +425,11 @@
 
     /* create class */
     SVG[name + 'Effect'] = function() {
-      var attrs = arguments[arguments.length - 1];
-      if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype){ //make sure its a object and its prototype is Object
-        Array.prototype.splice.call(arguments,arguments.length - 1, 1);
-      }
-      else attrs = {};
+      // var attrs = arguments[arguments.length - 1];
+      // if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype){ //make sure its a object and its prototype is Object
+      //   Array.prototype.splice.call(arguments,arguments.length - 1, 1);
+      // }
+      // else attrs = {};
 
       //call super
       this.constructor.call(this, SVG.create('fe' + name))
@@ -422,7 +437,7 @@
       //call constructor for this effect
       effect.apply(this,arguments);
 
-      this.attr(attrs);
+      // this.attr(attrs);
     }
 
     /* inherit from SVG.Effect */
@@ -447,17 +462,17 @@
     /* create class */
     SVG[name + 'Effect'] = function() {
       //see if theres a children array
-      var children = arguments[arguments.length - 1];
-      if(typeof children == 'object' && children.__proto__ === Array.prototype){ //make sure its a object and its prototype is Object
-        Array.prototype.splice.call(arguments,arguments.length - 1, 1);
-      }
-      else children = [];
+      // var children = arguments[arguments.length - 1];
+      // if(typeof children == 'object' && children.__proto__ === Array.prototype){ //make sure its a object and its prototype is Object
+      //   Array.prototype.splice.call(arguments,arguments.length - 1, 1);
+      // }
+      // else children = [];
 
-      var attrs = arguments[arguments.length - 1];
-      if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype && (name !== 'ComponentTransfer' || arguments.length > 1)){ //make sure its a object and its prototype is Object, and its not the object passed to componentTransfer
-        Array.prototype.splice.call(arguments,arguments.length - 1, 1);
-      }
-      else attrs = {};
+      // var attrs = arguments[arguments.length - 1];
+      // if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype && (name !== 'ComponentTransfer' || arguments.length > 1)){ //make sure its a object and its prototype is Object, and its not the object passed to componentTransfer
+      //   Array.prototype.splice.call(arguments,arguments.length - 1, 1);
+      // }
+      // else attrs = {};
 
       //call super
       this.constructor.call(this, SVG.create('fe' + name))
@@ -466,12 +481,12 @@
       effect.apply(this,arguments);
 
       //set the attrs
-      this.attr(attrs);
+      // this.attr(attrs);
 
       //add the children
-      for (var i = 0; i < children.length; i++) {
-        this.add(children[i]);
-      };
+      // for (var i = 0; i < children.length; i++) {
+      //   this.add(children[i]);
+      // };
     }
 
     /* inherit from SVG.Effect */
@@ -496,11 +511,11 @@
     /* create class */
     SVG[name] = function() {
       // get attrs
-      var attrs = arguments[arguments.length - 1];
-      if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype){ //make sure its a object and its prototype is Object
-        Array.prototype.splice.call(arguments,arguments.length - 1, 1);
-      }
-      else attrs = {};
+      // var attrs = arguments[arguments.length - 1];
+      // if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype){ //make sure its a object and its prototype is Object
+      //   Array.prototype.splice.call(arguments,arguments.length - 1, 1);
+      // }
+      // else attrs = {};
 
       //call super
       this.constructor.call(this, SVG.create('fe' + name))
@@ -508,11 +523,11 @@
       //call constructor for this effect
       effect.apply(this,arguments);
 
-      this.attr(attrs);
+      // this.attr(attrs);
     }
 
     /* inherit from SVG.Effect */
-    SVG[name].prototype = new SVG.Effect;
+    SVG[name].prototype = new SVG.ChildEffect;
   });
 
   // Effect-specific extensions
@@ -528,7 +543,7 @@
 
   // Presets
   SVG.filter = {
-    sepiatone:  [ .343, .669, .119, 0, 0 
+    sepiatone:  [ .343, .669, .119, 0, 0
                 , .249, .626, .130, 0, 0
                 , .172, .334, .111, 0, 0
                 , .000, .000, .000, 1, 0 ]
@@ -565,11 +580,6 @@
         fn(arguments[k][i],i,arguments[k]);
       }
     }
-  }
-
-  function bindConstructor(fn,args){
-    Array.prototype.splice.call(args,0,0,null);
-    return fn.bind.apply( fn, args );
   }
 
 }).call(this);
