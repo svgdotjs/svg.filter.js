@@ -63,7 +63,9 @@
       // Merge effect
       merge: function() {
         //pass the array of arguments to the constructor because we dont know if the user gave us an array as the first arguemnt or wether they listed the effects in the arguments
-        return this.put(new (SVG.MergeEffect.bind.apply(SVG.MergeEffect,[undefined].concat(arguments))));
+        var args = [undefined];
+        for(var i in arguments) args.push(arguments[i]);
+        return this.put(new (SVG.MergeEffect.bind.apply(SVG.MergeEffect,args)));
       },
       // Gaussian Blur effect
       gaussianBlur: function(x,y) {
@@ -289,20 +291,31 @@
   // Create all parent effects
   var parentEffects = {
     merge: function(){
-      var inputs;
+      var children;
 
-      //if the first argument is an array use it
-      if(typeof arguments[0] == 'object' && arguments[0].hasOwnProperty('length'))
-        inputs = arguments[0];
-      else
-        inputs = arguments;
+      //test to see if we have a set
+      if(arguments[0] instanceof SVG.Set){
+        var that = this;
+        arguments[0].each(function(i){
+          if(this instanceof SVG.MergeNode)
+            that.put(this);
+          else if(this instanceof SVG.Effect || this instanceof SVG.ParentEffect)
+            that.put(new SVG.MergeNode(this));
+        })
+      }
+      else{
+        //if the first argument is an array use it
+        if(Array.isArray(arguments[0]))
+          children = arguments[0];
+        else
+          children = arguments;
 
-      //add nodes
-      for(var i = 0; i < inputs.length; i++){
-        if(inputs[i] instanceof SVG.MergeNode){
-          this.put(inputs[i]);
+        for(var i = 0; i < children.length; i++){
+          if(children[i] instanceof SVG.MergeNode){
+            this.put(children[i]);
+          }
+          else this.put(new SVG.MergeNode(children[i]));
         }
-        else this.put(new SVG.MergeNode(inputs[i]));
       }
     },
     componentTransfer: function(compontents){

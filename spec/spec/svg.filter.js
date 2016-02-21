@@ -71,7 +71,7 @@ describe('Effect', function() {
 
 describe('effects',function(){
   describe('MergeEffect', function() {
-    it('pass Array in, new SVG.MergeEffect(["id",anotherEffect])', function() {
+    it('pass an Array in, new SVG.MergeEffect(["id",anotherEffect])', function() {
       var effect = new SVG.MergeEffect(['some-id','another-id']);
       expect(effect.get(0).attr('in')).toBe('some-id');
       expect(effect.get(1).attr('in')).toBe('another-id');
@@ -81,6 +81,18 @@ describe('effects',function(){
       var effect = new SVG.MergeEffect('some-id','another-id');
       expect(effect.get(0).attr('in')).toBe('some-id');
       expect(effect.get(1).attr('in')).toBe('another-id');
+    });
+
+    it('pass a SVG.Set of SVG.Effects in', function() {
+      var filter = new SVG.Filter();
+      var set = new SVG.Set();
+      set.add(filter.flood('black'));
+      set.add(filter.offset(10));
+
+      var effect = filter.merge(set);
+      expect(effect.children().length).toBe(2);
+      expect(effect.get(0).attr('in')).toBe(set.get(0).result());
+      expect(effect.get(1).attr('in')).toBe(set.get(1).result());
     });
 
     it('when .in() is called it prepends a MergeNode', function() {
