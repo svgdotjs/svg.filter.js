@@ -2,110 +2,105 @@
 ;(function() {
 
   // Main filter class
-  SVG.Filter = function() {
-    this.constructor.call(this, SVG.create('filter'))
-  }
+  SVG.Filter = SVG.invent({
+    create: 'filter',
+    inherit: SVG.Parent,
+    extend: {
+      // Static strings
+      source:           'SourceGraphic',
+      sourceAlpha:      'SourceAlpha',
+      background:       'BackgroundImage',
+      backgroundAlpha:  'BackgroundAlpha',
+      fill:             'FillPaint',
+      stroke:           'StrokePaint',
 
-  // Inherit from SVG.Container
-  SVG.Filter.prototype = new SVG.Parent
+      autoSetIn: true,
+      // Custom put method for leaner code
+      put: function(element, i) {
+        this.add(element, i)
 
-  //
-  SVG.extend(SVG.Filter, {
-    // Static strings
-    source:           'SourceGraphic'
-  , sourceAlpha:      'SourceAlpha'
-  , background:       'BackgroundImage'
-  , backgroundAlpha:  'BackgroundAlpha'
-  , fill:             'FillPaint'
-  , stroke:           'StrokePaint'
+        if(!element.attr('in') && this.autoSetIn){
+          element.attr('in',this.source);
+        }
+        if(!element.attr('result')){
+          element.attr('result',element);
+        }
 
-  , autoSetIn: true
-    // Custom put method for leaner code
-  , put: function(element, i) {
-      this.add(element, i)
-
-      if(!element.attr('in') && this.autoSetIn){
-        element.attr('in',this.source);
+        return element;
+      },
+      // Blend effect
+      blend: function(in1, in2, mode) {
+        return this.put(new SVG.BlendEffect(in1, in2, mode) );
+      },
+      // ColorMatrix effect
+      colorMatrix: function(type, values) {
+        return this.put(new SVG.ColorMatrixEffect(type, values));
+      },
+      // ConvolveMatrix effect
+      convolveMatrix: function(matrix) {
+        return this.put(new SVG.ConvolveMatrixEffect(matrix));
+      },
+      // ComponentTransfer effect
+      componentTransfer: function(components) {
+        return this.put(new SVG.ComponentTransferEffect(components));
+      },
+      // Composite effect
+      composite: function(in1, in2, operator) {
+        return this.put(new SVG.CompositeEffect(in1, in2, operator));
+      },
+      // Flood effect
+      flood: function(color) {
+        return this.put(new SVG.FloodEffect(color));
+      },
+      // Offset effect
+      offset: function(x, y) {
+        return this.put(new SVG.OffsetEffect(x,y));
+      },
+      // Image effect
+      image: function(src) {
+        return this.put(new SVG.ImageEffect(src));
+      },
+      // Merge effect
+      merge: function() {
+        //pass the array of arguments to the constructor because we dont know if the user gave us an array as the first arguemnt or wether they listed the effects in the arguments
+        return this.put(new (SVG.MergeEffect.bind.apply(SVG.MergeEffect,[undefined].concat(arguments))));
+      },
+      // Gaussian Blur effect
+      gaussianBlur: function(x,y) {
+        return this.put(new SVG.GaussianBlurEffect(x,y));
+      },
+      // Morphology effect
+      morphology: function(operator,radius){
+        return this.put(new SVG.MorphologyEffect(operator,radius));
+      },
+      // DiffuseLighting effect
+      diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength){
+        return this.put(new SVG.DiffuseLightingEffect(surfaceScale,diffuseConstant,kernelUnitLength));
+      },
+      // DisplacementMap effect
+      displacementMap: function(in1,in2,scale,xChannelSelector,yChannelSelector){
+        return this.put(new SVG.DisplacementMapEffect(in1,in2,scale,xChannelSelector,yChannelSelector));
+      },
+      // SpecularLighting effect
+      specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
+        return this.put(new SVG.SpecularLightingEffect(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength));
+      },
+      // Tile effect
+      tile: function(){
+        return this.put(new SVG.TileEffect());
+      },
+      // Turbulence effect
+      turbulence: function(baseFrequency,numOctaves,seed,stitchTiles,type){
+        return this.put(new SVG.TurbulenceEffect(baseFrequency,numOctaves,seed,stitchTiles,type));
+      },
+      // Default string value
+      toString: function() {
+        return 'url(#' + this.attr('id') + ')'
       }
-      if(!element.attr('result')){
-        element.attr('result',element);
-      }
+    }
+  });
 
-      return element;
-    }
-    // Blend effect
-  , blend: function(in1, in2, mode) {
-      return this.put(new SVG.BlendEffect(in1, in2, mode) );
-    }
-    // ColorMatrix effect
-  , colorMatrix: function(type, values) {
-      return this.put(new SVG.ColorMatrixEffect(type, values));
-    }
-    // ConvolveMatrix effect
-  , convolveMatrix: function(matrix) {
-      return this.put(new SVG.ConvolveMatrixEffect(matrix));
-    }
-    // ComponentTransfer effect
-  , componentTransfer: function(components) {
-      return this.put(new SVG.ComponentTransferEffect(components));
-    }
-    // Composite effect
-  , composite: function(in1, in2, operator) {
-      return this.put(new SVG.CompositeEffect(in1, in2, operator));
-    }
-    // Flood effect
-  , flood: function(color) {
-      return this.put(new SVG.FloodEffect(color));
-    }
-    // Offset effect
-  , offset: function(x, y) {
-      return this.put(new SVG.OffsetEffect(x,y));
-    }
-    // Image effect
-  , image: function(src) {
-      return this.put(new SVG.ImageEffect(src));
-    }
-    // Merge effect
-  , merge: function() {
-      //pass the array of arguments to the constructor because we dont know if the user gave us an array as the first arguemnt or wether they listed the effects in the arguments
-      return this.put(new SVG.MergeEffect.bind.apply(SVG.MergeEffect,[undefined].concat(arguments)));
-    }
-    // Gaussian Blur effect
-  , gaussianBlur: function(x,y) {
-      return this.put(new SVG.GaussianBlurEffect(x,y));
-    }
-    // Morphology effect
-  , morphology: function(operator,radius){
-      return this.put(new SVG.MorphologyEffect(operator,radius));
-    }
-    // DiffuseLighting effect
-  , diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength){
-      return this.put(new SVG.DiffuseLightingEffect(surfaceScale,diffuseConstant,kernelUnitLength));
-    }
-    // DisplacementMap effect
-  , displacementMap: function(in1,in2,scale,xChannelSelector,yChannelSelector){
-      return this.put(new SVG.DisplacementMapEffect(in1,in2,scale,xChannelSelector,yChannelSelector));
-    }
-    // SpecularLighting effect
-  , specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
-      return this.put(new SVG.SpecularLightingEffect(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength));
-    }
-    // Tile effect
-  , tile: function(){
-      return this.put(new SVG.TileEffect());
-    }
-    // Turbulence effect
-  , turbulence: function(baseFrequency,numOctaves,seed,stitchTiles,type){
-      return this.put(new SVG.TurbulenceEffect(baseFrequency,numOctaves,seed,stitchTiles,type));
-    }
-    // Default string value
-  , toString: function() {
-      return 'url(#' + this.attr('id') + ')'
-    }
-
-  })
-
-  //
+  //add .filter function
   SVG.extend(SVG.Defs, {
     // Define filter
     filter: function(block) {
@@ -117,19 +112,13 @@
 
       return filter
     }
-
-  })
-
-  //
+  });
   SVG.extend(SVG.Container, {
     // Define filter on defs
     filter: function(block) {
       return this.defs().filter(block)
     }
-
-  })
-
-  //
+  });
   SVG.extend(SVG.Element, SVG.G, SVG.Nested, {
     // Create filter element in defs and store reference
     filter: function(block) {
@@ -143,9 +132,9 @@
       this.attr('filter', this.filterer)
 
       return this.filterer
-    }
+    },
     // Remove filter
-  , unfilter: function(remove) {
+    unfilter: function(remove) {
       /* also remove the filter node */
       if (this.filterer && remove === true)
         this.filterer.remove()
@@ -156,63 +145,66 @@
       /* remove filter attribute */
       return this.attr('filter', null)
     }
+  });
 
-  })
-
-  // Create wrapping SVG.Effect class
-  SVG.Effect = function() {}
-
-  // Inherit from SVG.Element
-  SVG.Effect.prototype = new SVG.Element
-
-  SVG.extend(SVG.Effect, {
-    // Set in attribute
-    in: function(effect) {
-      return this.attr('in', effect)
+  // Create SVG.Effect class
+  SVG.Effect = SVG.invent({
+    create: function(){
+      this.constructor.call(this);
+    },
+    inherit: SVG.Element,
+    extend: {
+      // Set in attribute
+      in: function(effect) {
+        return this.attr('in', effect)
+      },
+      // Named result
+      result: function() {
+        return this.attr('result') || this.attr('id') + 'Out';
+      },
+      // Stringification
+      toString: function() {
+        return this.result();
+      }
     }
-    // Named result
-  , result: function() {
-      return this.attr('result') || this.attr('id') + 'Out'
-    }
-    // Stringification
-  , toString: function() {
-      return this.result()
-    }
-
-  })
+  });
 
   // create class for parent effects like merge
-  SVG.ParentEffect = function(){}
-
   // Inherit from SVG.Parent
-  SVG.ParentEffect.prototype = new SVG.Parent
-
-  SVG.extend(SVG.ParentEffect, {
-    // Set in attribute
-    in: function(effect) {
-      return this.attr('in', effect)
+  SVG.ParentEffect = SVG.invent({
+    create: function(){
+      this.constructor.call(this);
+    },
+    inherit: SVG.Parent,
+    extend: {
+      // Set in attribute
+      in: function(effect) {
+        return this.attr('in', effect);
+      },
+      // Named result
+      result: function() {
+        return this.attr('result') || this.attr('id') + 'Out';
+      },
+      // Stringification
+      toString: function() {
+        return this.result();
+      }
     }
-    // Named result
-  , result: function() {
-      return this.attr('result') || this.attr('id') + 'Out'
-    }
-    // Stringification
-  , toString: function() {
-      return this.result()
-    }
-
   })
 
-  SVG.ChildEffect = function(){};
-
-  SVG.ChildEffect.prototype = new SVG.Element;
-
-  SVG.extend(SVG.ChildEffect,{
+  //crea class for child effects, like MergeNode, FuncR and lights
+  SVG.ChildEffect = SVG.invent({
+    create: function(){
+      this.constructor.call(this);
+    },
+    inherit: SVG.Element,
+    extend: {
     in: function(effect){
       this.attr('in',effect);
     }
     //dont include any "result" functions because these types of nodes dont have them
-  })
+    }
+  });
 
   // Create all different effects
   var effects = {
@@ -414,130 +406,94 @@
           break;
       }
     }
-
-  })
+  });
 
   //create effects
   foreach(effects,function(effect,i){
 
     /* capitalize name */
-    var name = i.charAt(0).toUpperCase() + i.slice(1)
-
-    /* create class */
-    SVG[name + 'Effect'] = function() {
-      // var attrs = arguments[arguments.length - 1];
-      // if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype){ //make sure its a object and its prototype is Object
-      //   Array.prototype.splice.call(arguments,arguments.length - 1, 1);
-      // }
-      // else attrs = {};
-
-      //call super
-      this.constructor.call(this, SVG.create('fe' + name))
-
-      //call constructor for this effect
-      effect.apply(this,arguments);
-
-      // this.attr(attrs);
-    }
-
-    /* inherit from SVG.Effect */
-    SVG[name + 'Effect'].prototype = new SVG.Effect;
+    var name = i.charAt(0).toUpperCase() + i.slice(1);
+    var proto = {};
 
     /* make all effects interchainable */
     foreach(effects,parentEffects,function(effect,e){
-
-      SVG[name + 'Effect'].prototype[e] = function() {
+      proto[e] = function() {
         return this.parent[e].apply(this.parent, arguments).in(this)
       }
-
     })
+
+    /* create class */
+    SVG[name + 'Effect'] = SVG.invent({
+      create: function() {
+        //call super
+        this.constructor.call(this, SVG.create('fe' + name))
+
+        //call constructor for this effect
+        effect.apply(this,arguments);
+      },
+      inherit: SVG.Effect,
+      extend: proto
+    });
   });
 
   //create parent effects
   foreach(parentEffects,function(effect,i){
 
     /* capitalize name */
-    var name = i.charAt(0).toUpperCase() + i.slice(1)
-
-    /* create class */
-    SVG[name + 'Effect'] = function() {
-      //see if theres a children array
-      // var children = arguments[arguments.length - 1];
-      // if(typeof children == 'object' && children.__proto__ === Array.prototype){ //make sure its a object and its prototype is Object
-      //   Array.prototype.splice.call(arguments,arguments.length - 1, 1);
-      // }
-      // else children = [];
-
-      // var attrs = arguments[arguments.length - 1];
-      // if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype && (name !== 'ComponentTransfer' || arguments.length > 1)){ //make sure its a object and its prototype is Object, and its not the object passed to componentTransfer
-      //   Array.prototype.splice.call(arguments,arguments.length - 1, 1);
-      // }
-      // else attrs = {};
-
-      //call super
-      this.constructor.call(this, SVG.create('fe' + name))
-
-      //call constructor for this effect
-      effect.apply(this,arguments);
-
-      //set the attrs
-      // this.attr(attrs);
-
-      //add the children
-      // for (var i = 0; i < children.length; i++) {
-      //   this.add(children[i]);
-      // };
-    }
-
-    /* inherit from SVG.Effect */
-    SVG[name + 'Effect'].prototype = new SVG.ParentEffect;
+    var name = i.charAt(0).toUpperCase() + i.slice(1);
+    var proto = {};
 
     /* make all effects interchainable */
     foreach(effects,parentEffects,function(effect,e){
-
-      SVG[name + 'Effect'].prototype[e] = function() {
-        return this.parent[e].apply(this.parent, arguments).in(this)
+      proto[e] = function() {
+        return this.parent() && this.parent()[e].apply(this.parent(), arguments).in(this)
       }
-
     })
+
+    /* create class */
+    SVG[name + 'Effect'] = SVG.invent({
+      create: function() {
+        //call super
+        this.constructor.call(this, SVG.create('fe' + name))
+
+        //call constructor for this effect
+        effect.apply(this,arguments);
+      },
+      inherit: SVG.ParentEffect,
+      extend: proto
+    });
   });
 
   //create child effects
   foreach(childEffects,function(effect,i){
 
     /* capitalize name */
-    var name = i.charAt(0).toUpperCase() + i.slice(1)
+    var name = i.charAt(0).toUpperCase() + i.slice(1);
+    var proto = {};
 
     /* create class */
-    SVG[name] = function() {
-      // get attrs
-      // var attrs = arguments[arguments.length - 1];
-      // if(typeof attrs == 'object' && attrs.__proto__ === Object.prototype){ //make sure its a object and its prototype is Object
-      //   Array.prototype.splice.call(arguments,arguments.length - 1, 1);
-      // }
-      // else attrs = {};
+    SVG[name] = SVG.invent({
+      create: function() {
+        //call super
+        this.constructor.call(this, SVG.create('fe' + name))
 
-      //call super
-      this.constructor.call(this, SVG.create('fe' + name))
-
-      //call constructor for this effect
-      effect.apply(this,arguments);
-
-      // this.attr(attrs);
-    }
-
-    /* inherit from SVG.Effect */
-    SVG[name].prototype = new SVG.ChildEffect;
+        //call constructor for this effect
+        effect.apply(this,arguments);
+      },
+      inherit: SVG.ChildEffect,
+      extend: proto
+    });
   });
 
   // Effect-specific extensions
-  SVG.extend(SVG.FloodEffect, {
-    // implement flood-color and flood-opacity
-  })
-
   SVG.extend(SVG.MergeEffect,{
     in: function(effect){
-      this.put(new SVG.MergeNode(effect)).back();
+      if(effect instanceof SVG.MergeNode)
+        this.add(effect,0);
+      else
+        this.add(new SVG.MergeNode(effect),0);
+
+      return this;
     }
   })
 

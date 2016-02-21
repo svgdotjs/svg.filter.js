@@ -9,6 +9,10 @@ describe('Filter', function() {
     draw.clear();
   });
 
+  it('should extend SVG.Parent',function(){
+    expect(SVG.Filter.prototype.__proto__).toBe(SVG.Parent.prototype);
+  });
+
   it('creates the filter() method on elements', function() {
     expect(draw.filter() instanceof SVG.Filter).toBe(true);
   });
@@ -46,6 +50,12 @@ describe('Effect', function() {
     expect(blur.type).toBe('feGaussianBlur');
   });
 
+  it('are interchainable', function() {
+    var filter = new SVG.Filter();
+    filter.merge(filter.source).gaussianBlur(3);
+    expect(filter.get(1).attr('in')).toBe(filter.get(0).result())
+  });
+
   describe('result()', function() {
     it('returns the output name containing the element id', function() {
       expect(blur.result()).toBe(blur.attr('id') + 'Out');
@@ -71,6 +81,12 @@ describe('effects',function(){
       var effect = new SVG.MergeEffect('some-id','another-id');
       expect(effect.get(0).attr('in')).toBe('some-id');
       expect(effect.get(1).attr('in')).toBe('another-id');
+    });
+
+    it('when .in() is called it prepends a MergeNode', function() {
+      var effect = new SVG.MergeEffect('first-id');
+      effect.in('insert-id');
+      expect(effect.get(0).attr('in')).toBe('insert-id');
     });
   });
 });
