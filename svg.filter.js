@@ -169,27 +169,27 @@
         return this.result();
       }
     }
-  });
+  })
 
   // create class for parent effects like merge
   // Inherit from SVG.Parent
   SVG.ParentEffect = SVG.invent({
     create: function(){
-      this.constructor.call(this);
+      this.constructor.call(this)
     },
     inherit: SVG.Parent,
     extend: {
       // Set in attribute
       in: function(effect) {
-        return this.attr('in', effect);
+        return this.attr('in', effect)
       },
       // Named result
       result: function() {
-        return this.attr('result') || this.attr('id') + 'Out';
+        return this.attr('result') || this.attr('id') + 'Out'
       },
       // Stringification
       toString: function() {
-        return this.result();
+        return this.result()
       }
     }
   })
@@ -197,16 +197,16 @@
   //crea class for child effects, like MergeNode, FuncR and lights
   SVG.ChildEffect = SVG.invent({
     create: function(){
-      this.constructor.call(this);
+      this.constructor.call(this)
     },
     inherit: SVG.Element,
     extend: {
     in: function(effect){
-      this.attr('in',effect);
+      this.attr('in',effect)
     }
     //dont include any "result" functions because these types of nodes dont have them
     }
-  });
+  })
 
   // Create all different effects
   var effects = {
@@ -224,7 +224,7 @@
       this.attr({
         type:   type
       , values: typeof values == 'undefined' ? null : values
-      });
+      })
     },
     convolveMatrix: function(matrix){
       matrix = normaliseMatrix(matrix)
@@ -232,7 +232,7 @@
       this.attr({
         order:        Math.sqrt(matrix.split(' ').length)
       , kernelMatrix: matrix
-      });
+      })
     },
     composite: function(in1, in2, operator){
       this.attr({
@@ -242,7 +242,7 @@
       })
     },
     flood: function(color){
-      this.attr('flood-color',color);
+      this.attr('flood-color',color)
     },
     offset: function(x,y){
       this.attr({
@@ -272,7 +272,7 @@
       this.attr({
         operator: operator,
         radius: radius
-      });
+      })
     },
     tile: function(){
 
@@ -291,41 +291,41 @@
   // Create all parent effects
   var parentEffects = {
     merge: function(){
-      var children;
+      var children
 
       //test to see if we have a set
       if(arguments[0] instanceof SVG.Set){
-        var that = this;
+        var that = this
         arguments[0].each(function(i){
           if(this instanceof SVG.MergeNode)
-            that.put(this);
+            that.put(this)
           else if(this instanceof SVG.Effect || this instanceof SVG.ParentEffect)
-            that.put(new SVG.MergeNode(this));
+            that.put(new SVG.MergeNode(this))
         })
       }
       else{
         //if the first argument is an array use it
         if(Array.isArray(arguments[0]))
-          children = arguments[0];
+          children = arguments[0]
         else
-          children = arguments;
+          children = arguments
 
         for(var i = 0; i < children.length; i++){
           if(children[i] instanceof SVG.MergeNode){
-            this.put(children[i]);
+            this.put(children[i])
           }
-          else this.put(new SVG.MergeNode(children[i]));
+          else this.put(new SVG.MergeNode(children[i]))
         }
       }
     },
     componentTransfer: function(compontents){
       /* create rgb set */
-      this.rgb = new SVG.Set;
+      this.rgb = new SVG.Set
 
       /* create components */
       ;(['r', 'g', 'b', 'a']).forEach(function(c) {
         /* create component */
-        this[c] = new SVG['Func' + c.toUpperCase()]('identity');
+        this[c] = new SVG['Func' + c.toUpperCase()]('identity')
 
         /* store component in set */
         this.rgb.add(this[c])
@@ -393,7 +393,7 @@
       })
     },
     mergeNode: function(in1){
-      this.attr('in',in1);
+      this.attr('in',in1)
     }
   }
 
@@ -401,32 +401,32 @@
   ;(['r', 'g', 'b', 'a']).forEach(function(c) {
     /* create class */
     childEffects['Func' + c.toUpperCase()] = function(type) {
-      this.attr('type',type);
+      this.attr('type',type)
 
       // take diffent arguments based on the type
       switch(type){
         case 'table':
           this.attr('tableValues',arguments[1])
-          break;
+          break
         case 'linear':
           this.attr('slope',arguments[1])
           this.attr('intercept',arguments[2])
-          break;
+          break
         case 'gamma':
           this.attr('amplitude',arguments[1])
           this.attr('exponent',arguments[2])
           this.attr('offset',arguments[2])
-          break;
+          break
       }
     }
-  });
+  })
 
   //create effects
   foreach(effects,function(effect,i){
 
     /* capitalize name */
-    var name = i.charAt(0).toUpperCase() + i.slice(1);
-    var proto = {};
+    var name = i.charAt(0).toUpperCase() + i.slice(1)
+    var proto = {}
 
     /* make all effects interchainable */
     foreach(effects,parentEffects,function(effect,e){
@@ -442,19 +442,19 @@
         this.constructor.call(this, SVG.create('fe' + name))
 
         //call constructor for this effect
-        effect.apply(this,arguments);
+        effect.apply(this,arguments)
       },
       inherit: SVG.Effect,
       extend: proto
-    });
-  });
+    })
+  })
 
   //create parent effects
   foreach(parentEffects,function(effect,i){
 
     /* capitalize name */
-    var name = i.charAt(0).toUpperCase() + i.slice(1);
-    var proto = {};
+    var name = i.charAt(0).toUpperCase() + i.slice(1)
+    var proto = {}
 
     /* make all effects interchainable */
     foreach(effects,parentEffects,function(effect,e){
@@ -470,19 +470,19 @@
         this.constructor.call(this, SVG.create('fe' + name))
 
         //call constructor for this effect
-        effect.apply(this,arguments);
+        effect.apply(this,arguments)
       },
       inherit: SVG.ParentEffect,
       extend: proto
-    });
-  });
+    })
+  })
 
   //create child effects
   foreach(childEffects,function(effect,i){
 
     /* capitalize name */
-    var name = i.charAt(0).toUpperCase() + i.slice(1);
-    var proto = {};
+    var name = i.charAt(0).toUpperCase() + i.slice(1)
+    var proto = {}
 
     /* create class */
     SVG[name] = SVG.invent({
@@ -491,22 +491,22 @@
         this.constructor.call(this, SVG.create('fe' + name))
 
         //call constructor for this effect
-        effect.apply(this,arguments);
+        effect.apply(this,arguments)
       },
       inherit: SVG.ChildEffect,
       extend: proto
-    });
-  });
+    })
+  })
 
   // Effect-specific extensions
   SVG.extend(SVG.MergeEffect,{
     in: function(effect){
       if(effect instanceof SVG.MergeNode)
-        this.add(effect,0);
+        this.add(effect,0)
       else
-        this.add(new SVG.MergeNode(effect),0);
+        this.add(new SVG.MergeNode(effect),0)
 
-      return this;
+      return this
     }
   })
 
@@ -539,16 +539,16 @@
   }
 
   function foreach(){ //loops through mutiple objects
-    var fn = function(){};
+    var fn = function(){}
     if(typeof arguments[arguments.length-1] == 'function'){
       fn = arguments[arguments.length-1]
-      Array.prototype.splice.call(arguments,arguments.length-1,1);
+      Array.prototype.splice.call(arguments,arguments.length-1,1)
     }
     for(var k in arguments){
       for(var i in arguments[k]){
-        fn(arguments[k][i],i,arguments[k]);
+        fn(arguments[k][i],i,arguments[k])
       }
     }
   }
 
-}).call(this);
+}).call(this)
