@@ -49,8 +49,8 @@
         return this.put(new SVG.CompositeEffect(in1, in2, operator));
       },
       // Flood effect
-      flood: function(color) {
-        return this.put(new SVG.FloodEffect(color));
+      flood: function(color, opacity) {
+        return this.put(new SVG.FloodEffect(color, opacity));
       },
       // Offset effect
       offset: function(x, y) {
@@ -241,8 +241,9 @@
         operator: operator
       })
     },
-    flood: function(color){
-      this.attr('flood-color',color)
+    flood: function(color,opacity){
+      this.attr('flood-color',color);
+      if(opacity != null) this.attr('flood-opacity',opacity);
     },
     offset: function(x,y){
       this.attr({
