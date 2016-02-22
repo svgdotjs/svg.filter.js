@@ -4,6 +4,9 @@ A plugin for [svg.js](http://svgjs.com) adding filter functionality.
 
 Svg.filter.js is licensed under the terms of the MIT License.
 
+- [Examples](#examples)
+- [Effect Classes](#effect-classes)
+
 ## Usage
 Include this plugin after including the svg.js library in your html document.
 
@@ -12,7 +15,7 @@ For a few visual examples look at the [svg.js filter page](http://svgjs.com/filt
 Here is how each filter effect on the example page is achieved.
 
 
-## Effects
+## Examples
 - [gaussian blur](#gaussian-blur)
 - [horizontal blur](#horizontal-blur)
 - [desaturate](#desaturate)
@@ -280,6 +283,23 @@ hueRotate.animate(3000).attr('values', 360)
 ```
 
 ## Effect Classes
+
+- [Blend](#blend)
+- [ColorMatrix](#colorMatrix)
+- [ComponentTransfer](#componentTransfer)
+- [Composite](#composite)
+- [ConvolveMatrix](#convolveMatrix)
+- [DiffuseLighting](#diffuseLighting)
+- [DisplacementMap](#displacementMap)
+- [Flood](#flood)
+- [GaussianBlur](#gaussianBlur)
+- [Image](#image)
+- [Merge](#merge)
+- [Morphology](#morphology)
+- [Offset](#offset)
+- [SpecularLighting](#specularLighting)
+- [Tile](#tile)
+- [Turbulence](#turbulence)
 
 ### Blend
 
