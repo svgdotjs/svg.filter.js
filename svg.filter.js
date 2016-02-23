@@ -158,11 +158,11 @@
     extend: {
       // Set in attribute
       in: function(effect) {
-        return this.attr('in', effect)
+        return effect == null? this.parent() && this.parent().select('[result="'+this.attr('in')+'"]').get(0) || this.attr('in') : this.attr('in', effect)
       },
       // Named result
       result: function(result) {
-        return result == null? this.attr('result') || this.attr('id') + 'Out' : this.attr('result',result)
+        return result == null? this.attr('result') : this.attr('result',result)
       },
       // Stringification
       toString: function() {
@@ -181,11 +181,11 @@
     extend: {
       // Set in attribute
       in: function(effect) {
-        return this.attr('in', effect)
+        return effect == null? this.parent() && this.parent().select('[result="'+this.attr('in')+'"]').get(0) || this.attr('in') : this.attr('in', effect)
       },
       // Named result
       result: function(result) {
-        return result == null? this.attr('result') || this.attr('id') + 'Out' : this.attr('result',result)
+        return result == null? this.attr('result') : this.attr('result',result)
       },
       // Stringification
       toString: function() {
@@ -334,7 +334,7 @@
       })
     },
     gaussianBlur: function(x,y){
-      if(arguments.length > 0)
+      if(x != null || y != null)
         this.attr('stdDeviation', listString(Array.prototype.slice.call(arguments)))
       else
         this.attr('stdDeviation', '0 0')
@@ -507,6 +507,9 @@
 
         //call constructor for this effect
         effect.apply(this,arguments)
+
+        //set the result
+        this.result(this.attr('id') + 'Out')
       },
       inherit: SVG.Effect,
       extend: proto
@@ -528,6 +531,9 @@
 
         //call constructor for this effect
         effect.apply(this,arguments)
+
+        //set the result
+        this.result(this.attr('id') + 'Out')
       },
       inherit: SVG.ParentEffect,
       extend: proto
@@ -566,9 +572,9 @@
       return this
     }
   })
-  SVG.extend(SVG.CompositeEffect,SVG.Blend,SVG.d=DisplacementMapEffect,{
+  SVG.extend(SVG.CompositeEffect,SVG.BlendEffect,SVG.DisplacementMapEffect,{
     in2: function(effect){
-      return this.attr('in2',effect)
+        return effect == null? this.parent() && this.parent().select('[result="'+this.attr('in2')+'"]').get(0) || this.attr('in2') : this.attr('in2', effect)
     }
   })
 

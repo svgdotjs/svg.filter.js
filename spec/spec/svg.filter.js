@@ -17,10 +17,6 @@ describe('Filter', function() {
     expect(draw.filter() instanceof SVG.Filter).toBe(true)
   })
 
-  describe('Element#filter()', function() {
-
-  })
-
   describe('source', function() {
     it('returns "SourceGraphic" string', function() {
       rect.filter(function(add) {
@@ -40,14 +36,13 @@ describe('Filter', function() {
 })
 
 describe('Effect', function() {
-  var blur
-
-  beforeEach(function() {
-    blur = new SVG.GaussianBlurEffect
+  beforeAll(function() {
+    this.filter = new SVG.Filter()
+    this.blur = this.filter.gaussianBlur()
   })
 
   it('has the filter type stored in the instance', function() {
-    expect(blur.type).toBe('feGaussianBlur')
+    expect(this.blur.type).toBe('feGaussianBlur')
   })
 
   it('are interchainable', function() {
@@ -57,23 +52,96 @@ describe('Effect', function() {
     expect(filter.get(2).attr('in')).toBe(filter.get(1).result());
   })
 
+  it('result is set when effect it created', function() {
+    var offset = new SVG.OffsetEffect(10)
+    expect(offset.attr('result')).not.toBeUndefined()
+  });
+
   describe('result()', function() {
     it('returns the output name containing the element id', function() {
-      expect(blur.result()).toBe(blur.attr('id') + 'Out')
+      expect(this.blur.result()).toBe(this.blur.attr('id') + 'Out')
     })
 
-    it('set result by passing an argument in',function(){
-      var a = blur.result();
-      blur.result('test-result');
-      expect(blur.attr('result')).toBe('test-result');
-      expect(blur.result()).toBe('test-result');
-      blur.attr('result',a);
+    it('works as a setter',function(){
+      var a = this.blur.result();
+      this.blur.result('test-result');
+      expect(this.blur.attr('result')).toBe('test-result');
+      expect(this.blur.result()).toBe('test-result');
+      this.blur.attr('result',a);
+    })
+
+    it('works as a getter', function(){
+      expect(this.blur.result()).toBe(this.blur.attr('result'))
     })
   })
 
+  describe('in()', function() {
+    it('sets effects \'in\' attr', function() {
+      this.blur.in('testing')
+      expect(this.blur.attr('in')).toBe('testing');
+    })
+
+    it('returns an effect with a matching \'result\' attr', function() {
+      otherEffect = this.filter.offset(10)
+      this.blur.in(otherEffect)
+      expect(this.blur.in()).toBe(otherEffect)
+      otherEffect.remove()
+    })
+
+    it('returns the attr value if no effect with has a matching \'result\' attr', function() {
+      this.blur.in('testing')
+      expect(this.blur.in()).toBe('testing');
+    })
+
+    it('still works when effect has no parent', function() {
+      this.blur.remove()
+      this.blur.in('testing-parent')
+      expect(this.blur.in()).toBe('testing-parent')
+      this.filter.add(this.blur)
+    });
+  })
+
+  describe('in2() *only on a few effects*', function() {
+    beforeAll(function(){
+      this.composite = this.blur.composite(this.filter.sourceAlpha)
+    })
+
+    afterAll(function(){
+      this.composite.remove();
+    })
+
+    it('sets effects \'in2\' attr', function() {
+      this.composite.in2('testing')
+      expect(this.composite.attr('in2')).toBe('testing')
+      this.composite.in2(this.filter.sourceAlpha)
+    })
+
+    it('returns an effect with a matching \'result\' attr', function() {
+      otherEffect = this.filter.offset(10)
+      this.composite.in2(otherEffect)
+      expect(this.composite.in2()).toBe(otherEffect)
+      this.composite.in2(this.filter.sourceAlpha)
+      otherEffect.remove()
+    })
+
+    it('returns the attr value if no effect with has a matching \'result\' attr', function() {
+      this.composite.in2('testing')
+      expect(this.composite.in2()).toBe('testing');
+      this.composite.in2(this.filter.sourceAlpha)
+    })
+
+    it('still works when effect has no parent', function() {
+      this.composite.remove()
+      this.composite.in2('testing-parent')
+      expect(this.composite.in2()).toBe('testing-parent')
+      this.composite.in2(this.filter.sourceAlpha)
+      this.filter.add(this.composite)
+    });
+  });
+
   describe('toString()', function() {
     it('is an alias to the result() method', function() {
-      expect(blur.toString()).toBe(blur.result())
+      expect(this.blur.toString()).toBe(this.blur.result())
     })
   })
 })

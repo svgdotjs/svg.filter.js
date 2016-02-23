@@ -311,6 +311,7 @@ for more details check out each effects doc below
 
 ## Effect Classes
 
+- [Base Effect Class](base-effect-class)
 - [Blend](#blend)
 - [ColorMatrix](#colormatrix)
 - [ComponentTransfer](#componenttransfer)
@@ -327,6 +328,40 @@ for more details check out each effects doc below
 - [SpecularLighting](#specularlighting)
 - [Tile](#tile)
 - [Turbulence](#turbulence)
+
+### Base Effect Class
+
+#### in(effect)
+  gets or sets the `in` attribute of the effect
+  some effect like [Blend](blend), [Composite](#composite), [DisplacementMap](displacementmap) have a `in2` function, it works the same as the as
+
+  - **effect:** this can be another effect or a string <br>
+    if **effect** is not provided it will look for another effect on the same filter whos `result` is equal to this effects `in`, else it will return the value of the `in` attribute
+    ```javascript
+    image.filter(function(add){
+      var offset = add.offset(10)
+
+      //create the blur effect and then set its input
+      var blur = add.gaussianBlur(3)
+
+      //set the input to an effect
+      blur.in(offset)
+
+      //this will return the offset effect
+      var input = blur.in()
+
+      //set the input to a string
+      blur.in('another-result-as-a-string')
+
+      //this will return a string since there is no other effect which has a matching result attribute
+      var input2 = blur.in()
+    })
+    ```
+
+#### result(string)
+  gets or sets the `result` attribute of the effect
+
+  - **string:** if no string if provided it will act as a getter and return the value of the `result` attruibute
 
 ### Blend
 
