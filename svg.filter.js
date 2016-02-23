@@ -161,8 +161,8 @@
         return this.attr('in', effect)
       },
       // Named result
-      result: function() {
-        return this.attr('result') || this.attr('id') + 'Out';
+      result: function(result) {
+        return result == null? this.attr('result') || this.attr('id') + 'Out' : this.attr('result',result);
       },
       // Stringification
       toString: function() {
@@ -184,8 +184,8 @@
         return this.attr('in', effect)
       },
       // Named result
-      result: function() {
-        return this.attr('result') || this.attr('id') + 'Out'
+      result: function(result) {
+        return result == null? this.attr('result') || this.attr('id') + 'Out' : this.attr('result',result);
       },
       // Stringification
       toString: function() {

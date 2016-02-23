@@ -60,6 +60,14 @@ describe('Effect', function() {
     it('returns the output name containing the element id', function() {
       expect(blur.result()).toBe(blur.attr('id') + 'Out')
     })
+
+    it('set result by passing an argument in',function(){
+      var a = blur.result();
+      blur.result('test-result');
+      expect(blur.attr('result')).toBe('test-result');
+      expect(blur.result()).toBe('test-result');
+      blur.attr('result',a);
+    })
   })
 
   describe('toString()', function() {
