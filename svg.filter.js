@@ -20,72 +20,72 @@
         this.add(element, i)
 
         if(!element.attr('in') && this.autoSetIn){
-          element.attr('in',this.source);
+          element.attr('in',this.source)
         }
         if(!element.attr('result')){
-          element.attr('result',element);
+          element.attr('result',element)
         }
 
-        return element;
+        return element
       },
       // Blend effect
       blend: function(in1, in2, mode) {
-        return this.put(new SVG.BlendEffect(in1, in2, mode) );
+        return this.put(new SVG.BlendEffect(in1, in2, mode))
       },
       // ColorMatrix effect
       colorMatrix: function(type, values) {
-        return this.put(new SVG.ColorMatrixEffect(type, values));
+        return this.put(new SVG.ColorMatrixEffect(type, values))
       },
       // ConvolveMatrix effect
       convolveMatrix: function(matrix) {
-        return this.put(new SVG.ConvolveMatrixEffect(matrix));
+        return this.put(new SVG.ConvolveMatrixEffect(matrix))
       },
       // ComponentTransfer effect
       componentTransfer: function(components) {
-        return this.put(new SVG.ComponentTransferEffect(components));
+        return this.put(new SVG.ComponentTransferEffect(components))
       },
       // Composite effect
       composite: function(in1, in2, operator) {
-        return this.put(new SVG.CompositeEffect(in1, in2, operator));
+        return this.put(new SVG.CompositeEffect(in1, in2, operator))
       },
       // Flood effect
       flood: function(color, opacity) {
-        return this.put(new SVG.FloodEffect(color, opacity));
+        return this.put(new SVG.FloodEffect(color, opacity))
       },
       // Offset effect
       offset: function(x, y) {
-        return this.put(new SVG.OffsetEffect(x,y));
+        return this.put(new SVG.OffsetEffect(x,y))
       },
       // Image effect
       image: function(src) {
-        return this.put(new SVG.ImageEffect(src));
+        return this.put(new SVG.ImageEffect(src))
       },
       // Merge effect
       merge: function() {
         //pass the array of arguments to the constructor because we dont know if the user gave us an array as the first arguemnt or wether they listed the effects in the arguments
-        var args = [undefined];
-        for(var i in arguments) args.push(arguments[i]);
-        return this.put(new (SVG.MergeEffect.bind.apply(SVG.MergeEffect,args)));
+        var args = [undefined]
+        for(var i in arguments) args.push(arguments[i])
+        return this.put(new (SVG.MergeEffect.bind.apply(SVG.MergeEffect,args)))
       },
       // Gaussian Blur effect
       gaussianBlur: function(x,y) {
-        return this.put(new SVG.GaussianBlurEffect(x,y));
+        return this.put(new SVG.GaussianBlurEffect(x,y))
       },
       // Morphology effect
       morphology: function(operator,radius){
-        return this.put(new SVG.MorphologyEffect(operator,radius));
+        return this.put(new SVG.MorphologyEffect(operator,radius))
       },
       // DiffuseLighting effect
       diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength){
-        return this.put(new SVG.DiffuseLightingEffect(surfaceScale,diffuseConstant,kernelUnitLength));
+        return this.put(new SVG.DiffuseLightingEffect(surfaceScale,diffuseConstant,kernelUnitLength))
       },
       // DisplacementMap effect
       displacementMap: function(in1,in2,scale,xChannelSelector,yChannelSelector){
-        return this.put(new SVG.DisplacementMapEffect(in1,in2,scale,xChannelSelector,yChannelSelector));
+        return this.put(new SVG.DisplacementMapEffect(in1,in2,scale,xChannelSelector,yChannelSelector))
       },
       // SpecularLighting effect
       specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
-        return this.put(new SVG.SpecularLightingEffect(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength));
+        return this.put(new SVG.SpecularLightingEffect(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength))
       },
       // Tile effect
       tile: function(){
@@ -93,14 +93,14 @@
       },
       // Turbulence effect
       turbulence: function(baseFrequency,numOctaves,seed,stitchTiles,type){
-        return this.put(new SVG.TurbulenceEffect(baseFrequency,numOctaves,seed,stitchTiles,type));
+        return this.put(new SVG.TurbulenceEffect(baseFrequency,numOctaves,seed,stitchTiles,type))
       },
       // Default string value
       toString: function() {
         return 'url(#' + this.attr('id') + ')'
       }
     }
-  });
+  })
 
   //add .filter function
   SVG.extend(SVG.Defs, {
@@ -114,13 +114,13 @@
 
       return filter
     }
-  });
+  })
   SVG.extend(SVG.Container, {
     // Define filter on defs
     filter: function(block) {
       return this.defs().filter(block)
     }
-  });
+  })
   SVG.extend(SVG.Element, SVG.G, SVG.Nested, {
     // Create filter element in defs and store reference
     filter: function(block) {
@@ -128,7 +128,7 @@
         block : this.doc().filter(block)
 
       if(this.doc() && this.filterer.doc() !== this.doc()){
-        this.doc().defs().add(this.filterer);
+        this.doc().defs().add(this.filterer)
       }
 
       this.attr('filter', this.filterer)
@@ -147,12 +147,12 @@
       /* remove filter attribute */
       return this.attr('filter', null)
     }
-  });
+  })
 
   // Create SVG.Effect class
   SVG.Effect = SVG.invent({
     create: function(){
-      this.constructor.call(this);
+      this.constructor.call(this)
     },
     inherit: SVG.Element,
     extend: {
@@ -162,11 +162,11 @@
       },
       // Named result
       result: function(result) {
-        return result == null? this.attr('result') || this.attr('id') + 'Out' : this.attr('result',result);
+        return result == null? this.attr('result') || this.attr('id') + 'Out' : this.attr('result',result)
       },
       // Stringification
       toString: function() {
-        return this.result();
+        return this.result()
       }
     }
   })
@@ -185,7 +185,7 @@
       },
       // Named result
       result: function(result) {
-        return result == null? this.attr('result') || this.attr('id') + 'Out' : this.attr('result',result);
+        return result == null? this.attr('result') || this.attr('id') + 'Out' : this.attr('result',result)
       },
       // Stringification
       toString: function() {
@@ -193,6 +193,76 @@
       }
     }
   })
+
+  //chaining
+  var chainingEffects = {
+    // Blend effect
+    blend: function(in2, mode) {
+      return this.parent() && this.parent().blend(this, in2, mode) //pass this as the first input
+    },
+    // ColorMatrix effect
+    colorMatrix: function(type, values) {
+      return this.parent() && this.parent().colorMatrix(type, values).in(this)
+    },
+    // ConvolveMatrix effect
+    convolveMatrix: function(matrix) {
+      return this.parent() && this.parent().convolveMatrix(matrix).in(this)
+    },
+    // ComponentTransfer effect
+    componentTransfer: function(components) {
+      return this.parent() && this.parent().componentTransfer(components).in(this)
+    },
+    // Composite effect
+    composite: function(in2, operator) {
+      return this.parent() && this.parent().composite(this, in2, operator) //pass this as the first input
+    },
+    // Flood effect
+    flood: function(color, opacity) {
+      return this.parent() && this.parent().flood(color, opacity) //this effect dont have inputs
+    },
+    // Offset effect
+    offset: function(x, y) {
+      return this.parent() && this.parent().offset(x,y).in(this)
+    },
+    // Image effect
+    image: function(src) {
+      return this.parent() && this.parent().image(src) //this effect dont have inputs
+    },
+    // Merge effect
+    merge: function() {
+      return this.parent() && this.parent().merge.apply(this.parent(),[this].concat(arguments)) //pass this as the first argument
+    },
+    // Gaussian Blur effect
+    gaussianBlur: function(x,y) {
+      return this.parent() && this.parent().gaussianBlur(x,y).in(this)
+    },
+    // Morphology effect
+    morphology: function(operator,radius){
+      return this.parent() && this.parent().morphology(operator,radius).in(this)
+    },
+    // DiffuseLighting effect
+    diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength){
+      return this.parent() && this.parent().diffuseLighting(surfaceScale,diffuseConstant,kernelUnitLength).in(this)
+    },
+    // DisplacementMap effect
+    displacementMap: function(in2,scale,xChannelSelector,yChannelSelector){
+      return this.parent() && this.parent().displacementMap(this,in2,scale,xChannelSelector,yChannelSelector) //pass this as the first input
+    },
+    // SpecularLighting effect
+    specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
+      return this.parent() && this.parent().specularLighting(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength).in(this)
+    },
+    // Tile effect
+    tile: function(){
+      return this.parent() && this.parent().tile().in(this)
+    },
+    // Turbulence effect
+    turbulence: function(baseFrequency,numOctaves,seed,stitchTiles,type){
+      return this.parent() && this.parent().turbulence(baseFrequency,numOctaves,seed,stitchTiles,type).in(this)
+    }
+  }
+  SVG.extend(SVG.Effect,chainingEffects)
+  SVG.extend(SVG.ParentEffect,chainingEffects)
 
   //crea class for child effects, like MergeNode, FuncR and lights
   SVG.ChildEffect = SVG.invent({
@@ -242,8 +312,8 @@
       })
     },
     flood: function(color,opacity){
-      this.attr('flood-color',color);
-      if(opacity != null) this.attr('flood-opacity',opacity);
+      this.attr('flood-color',color)
+      if(opacity != null) this.attr('flood-opacity',opacity)
     },
     offset: function(x,y){
       this.attr({
@@ -429,13 +499,6 @@
     var name = i.charAt(0).toUpperCase() + i.slice(1)
     var proto = {}
 
-    /* make all effects interchainable */
-    foreach(effects,parentEffects,function(effect,e){
-      proto[e] = function() {
-        return this.parent[e].apply(this.parent, arguments).in(this)
-      }
-    })
-
     /* create class */
     SVG[name + 'Effect'] = SVG.invent({
       create: function() {
@@ -456,13 +519,6 @@
     /* capitalize name */
     var name = i.charAt(0).toUpperCase() + i.slice(1)
     var proto = {}
-
-    /* make all effects interchainable */
-    foreach(effects,parentEffects,function(effect,e){
-      proto[e] = function() {
-        return this.parent() && this.parent()[e].apply(this.parent(), arguments).in(this)
-      }
-    })
 
     /* create class */
     SVG[name + 'Effect'] = SVG.invent({
@@ -508,6 +564,11 @@
         this.add(new SVG.MergeNode(effect),0)
 
       return this
+    }
+  })
+  SVG.extend(SVG.CompositeEffect,SVG.Blend,SVG.d=DisplacementMapEffect,{
+    in2: function(effect){
+      return this.attr('in2',effect)
     }
   })
 

@@ -5,6 +5,11 @@ A plugin for [svg.js](http://svgjs.com) adding filter functionality.
 Svg.filter.js is licensed under the terms of the MIT License.
 
 - [Examples](#examples)
+- [Furthermore](#furthermore)
+    - [unfilter](#unfilter)
+    - [referencing the filter node](#referencing-the-filter-node)
+    - [Animating filter values](#animating-filter-values)
+    - [Chaining Effects](#chaining-effects)
 - [Effect Classes](#effect-classes)
 
 ## Usage
@@ -282,22 +287,44 @@ image.filter(function(add) {
 hueRotate.animate(3000).attr('values', 360)
 ```
 
+### Chaining Effects
+
+[Method chaining](https://en.wikipedia.org/wiki/Method_chaining) is a programing style where each function retures the object it blongs to, for an example look at JQuery.<br>
+its posible to chain the effects on a filter when you are creating them, for example
+```javascript
+image.filter(function(add){
+  add.flood('black',0.5).composite(add.sourceAlpha,'in').offset(10).merge(add.source)
+})
+```
+
+this would create a basic shadow filter where the first input on the `composite` effect would be the `flood` effect, and the input on the offset effect would be the `composite` effect.<br>
+same with the `merge` effect, its first input would be the `offset` effect, and its second input would be `add.source`
+
+some effects like [Merge](#merge), [Blend](blend), [Composite](#composite), [DisplacementMap](displacementmap) have thier arguments changed when they are chained, for example
+```javascript
+image.filter(function(add){
+  add.flood('black',0.5).composite(add.sourceAlpha,'in')
+})
+```
+the `composite` effects first input is set to the `flood` effect and its second input becomes the first argument, this is the same for the merge, blend, composite, and displacmentMap effect. <br>
+for more details check out each effects doc below
+
 ## Effect Classes
 
 - [Blend](#blend)
-- [ColorMatrix](#colorMatrix)
-- [ComponentTransfer](#componentTransfer)
+- [ColorMatrix](#colormatrix)
+- [ComponentTransfer](#componenttransfer)
 - [Composite](#composite)
-- [ConvolveMatrix](#convolveMatrix)
+- [ConvolveMatrix](#convolvematrix)
 - [DiffuseLighting](#diffuseLighting)
-- [DisplacementMap](#displacementMap)
+- [DisplacementMap](#displacementmap)
 - [Flood](#flood)
-- [GaussianBlur](#gaussianBlur)
+- [GaussianBlur](#gaussianglur)
 - [Image](#image)
 - [Merge](#merge)
 - [Morphology](#morphology)
 - [Offset](#offset)
-- [SpecularLighting](#specularLighting)
+- [SpecularLighting](#specularlighting)
 - [Tile](#tile)
 - [Turbulence](#turbulence)
 
@@ -314,6 +341,12 @@ new SVG.BlendEffect(in1, in2, mode)
 - **in1**: an effect or the result of effect
 - **in2**: same as **in1**
 - **mode**: "normal | multiply | screen | darken | lighten" defaults to "normal"
+
+**chaining** when this effect is called right after another effect, for example:
+```javascript
+filter.offset(10).blend(filter.source)
+```
+the first input is set to the `offset` effect and the second input is set to `filter.source` or what ever was passed as the first argument, and the second input becomes the **mode**
 
 ### ColorMatrix
 
@@ -377,6 +410,13 @@ new SVG.CompositeEffect(in1, in2, operator);
 - **in2**: same as **in1**
 - **operator**: "over | in | out | atop | xor | arithmetic" defaults to "over"
 
+**chaining** when this effect is called right after another effect, for example:
+```javascript
+filter.flood('black',0.5).composite(filter.sourceAlpha,'in')
+```
+the first input is set to the `flood` effect and the second input is set to `filter.sourceAlpha` or what ever was passed as the first argument.<br>
+also the second argument becomes the **operator**
+
 ### ConvolveMatrix
 
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feConvolveMatrixElement)
@@ -420,6 +460,13 @@ new SVG.DisplacementMapEffect(in1, in2, scale, xChannelSelector, yChannelSelecto
 ```
 
 ***very complicated, just check out the W3 doc***
+
+**chaining** when this effect is called right after another effect, for example:
+```javascript
+filter.offset(20,50).displacementMap(filter.source,2)
+```
+the first input is set to the `offset` effect and the second input is set to `filter.source` or what ever was passed as the first argument.<br>
+also the second argument becomes the **scale**, and the third argument is the **xChannelSelector** and so on
 
 ### Flood
 
@@ -470,7 +517,7 @@ new SVG.MergeEffect();
 - **Array**: an Array of effects or effect results `filter.merge([effectOne,"result-two",another_effect])`
 - **SVG.Set**: a set of effects
 - **arguments**: pass each effect or result in as arguments `filter.merge(effect,"some-result",anotherEffect)`
-- **linking** you can also link the merge effect `filter.offset(10).merge(anotherEffect)` will result in a merge effect with its first input set to the `offset` effect and its second input set to `anotherEffect`
+- **chianing** you can also chian the merge effect `filter.offset(10).merge(anotherEffect)` will result in a merge effect with its first input set to the `offset` effect and its second input set to `anotherEffect`
 
 ### Morphology
 

@@ -52,8 +52,9 @@ describe('Effect', function() {
 
   it('are interchainable', function() {
     var filter = new SVG.Filter()
-    filter.merge(filter.source).gaussianBlur(3)
-    expect(filter.get(1).attr('in')).toBe(filter.get(0).result())
+    filter.gaussianBlur(3).merge(filter.source).offset(10);
+    expect(filter.get(1).get(0).attr('in')).toBe(filter.get(0).result());
+    expect(filter.get(2).attr('in')).toBe(filter.get(1).result());
   })
 
   describe('result()', function() {
@@ -107,6 +108,57 @@ describe('effects',function(){
       var effect = new SVG.MergeEffect('first-id')
       effect.in('insert-id')
       expect(effect.get(0).attr('in')).toBe('insert-id')
+    })
+
+    it('when chaining its first input is set to the effect before it', function() {
+      var filter = new SVG.Filter();
+      filter.offset(10).merge(filter.source);
+      expect(filter.get(1).get(0).attr('in')).toBe(filter.get(0).result())
+    });
+  })
+
+  describe('Composite', function() {
+    beforeAll(function(){
+      this.filter = new SVG.Filter();
+      this.filter.offset(10).composite(this.filter.source);
+    })
+
+    it('when chaining its first input is set to the effect before it', function() {
+      expect(this.filter.get(1).attr('in')).toBe(this.filter.get(0).result())
+    })
+
+    it('when chaining its second input is set to the first argument', function() {
+      expect(this.filter.get(1).attr('in2')).toBe(this.filter.source)
+    })
+  })
+
+  describe('BlendEffect', function() {
+    beforeAll(function(){
+      this.filter = new SVG.Filter();
+      this.filter.offset(10).blend(this.filter.source);
+    })
+
+    it('when chaining its first input is set to the effect before it', function() {
+      expect(this.filter.get(1).attr('in')).toBe(this.filter.get(0).result())
+    })
+
+    it('when chaining its second input is set to the first argument', function() {
+      expect(this.filter.get(1).attr('in2')).toBe(this.filter.source)
+    })
+  })
+
+  describe('DisplacementMap', function() {
+    beforeAll(function(){
+      this.filter = new SVG.Filter();
+      this.filter.offset(10).displacementMap(this.filter.source);
+    })
+
+    it('when chaining its first input is set to the effect before it', function() {
+      expect(this.filter.get(1).attr('in')).toBe(this.filter.get(0).result())
+    })
+
+    it('when chaining its second input is set to the first argument', function() {
+      expect(this.filter.get(1).attr('in2')).toBe(this.filter.source)
     })
   })
 })
