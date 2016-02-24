@@ -1,0 +1,28 @@
+{
+  "name": "svg.filter.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/wout/svg.filter.js",
+  "authors": [
+    "Wout Fierens"
+  ],
+  "description": "A plugin for svg.js adding filter functionality",
+  "main": [
+    "./dist/svg.filter.js"
+  ],
+  "keywords": [
+    "svg.js",
+    "filter",
+    "effect"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "svg.js":"^2.2.5"
+  }
+}

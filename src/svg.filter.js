@@ -1,4 +1,3 @@
-// svg.filter.js 0.4 - Copyright (c) 2013-2014 Wout Fierens - Licensed under the MIT license
 ;(function() {
 
   // Main filter class
