@@ -1,4 +1,4 @@
-/*! svg.filter.js - v2.0.0 - 2016-02-24
+/*! svg.filter.js - v2.0.2 - 2016-02-24
 * https://github.com/wout/svg.filter.js
 * Copyright (c) 2016 Wout Fierens; Licensed MIT */
 ;(function() {
