@@ -336,7 +336,7 @@ for more details check out each effects doc below
   some effect like [Blend](blend), [Composite](#composite), [DisplacementMap](displacementmap) have a `in2` function, it works the same as the as
 
   - **effect:** this can be another effect or a string <br>
-    if **effect** is not provided it will look for another effect on the same filter whos `result` is equal to this effects `in`, else it will return the value of the `in` attribute
+    if **effect** is not provided it will look for another effect on the same filter whos `result` is equal to this effects `in` attribute, else it will return the value of the `in` attribute
     ```javascript
     image.filter(function(add){
       var offset = add.offset(10)
@@ -358,10 +358,15 @@ for more details check out each effects doc below
     })
     ```
 
+#### in2(effect)
+  gets or sets the `in2` attribute of the effect
+  this function works the same as [in](#ineffect) and its only on effects [Blend](#blend), [Composite](#composite), and [DisplacementMap](#displacementmap)
+
 #### result(string)
   gets or sets the `result` attribute of the effect
 
-  - **string:** if no string if provided it will act as a getter and return the value of the `result` attruibute
+  - **string:** if a string is provided it will set the value of the `result` attruibute. <br>
+    if no arguments are provided it will act as a getter and return the value of the `result` attribute
 
 ### Blend
 
