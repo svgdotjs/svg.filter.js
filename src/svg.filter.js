@@ -334,7 +334,7 @@
     },
     gaussianBlur: function(x,y){
       if(x != null || y != null)
-        this.attr('stdDeviation', listString(Array.prototype.slice.call(arguments)))
+        this.attr('stdDeviation', listString(Array.prototype.slice.call(arguments)).trim())
       else
         this.attr('stdDeviation', '0 0')
     },
