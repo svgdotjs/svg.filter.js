@@ -333,10 +333,9 @@
       })
     },
     gaussianBlur: function(x,y){
-      if(x != null || y != null)
-        this.attr('stdDeviation', listString(Array.prototype.slice.call(arguments)))
-      else
-        this.attr('stdDeviation', '0 0')
+      x = x || 0
+      y = y || x || 0
+      this.attr('stdDeviation', x+' '+y)
     },
     morphology: function(operator,radius){
       this.attr({
@@ -593,16 +592,6 @@
 
     /* ensure there are no leading, tailing or double spaces */
     return matrix.toString().replace(/^\s+/, '').replace(/\s+$/, '').replace(/\s+/g, ' ')
-  }
-
-  function listString(list) {
-    if (!Array.isArray(list))
-      return list
-
-    for (var i = 0, l = list.length, s = []; i < l; i++)
-      s.push(list[i])
-
-    return s.join(' ')
   }
 
   function foreach(){ //loops through mutiple objects
