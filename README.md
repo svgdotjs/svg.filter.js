@@ -289,8 +289,8 @@ hueRotate.animate(3000).attr('values', 360)
 
 ### Chaining Effects
 
-[Method chaining](https://en.wikipedia.org/wiki/Method_chaining) is a programing style where each function retures the object it blongs to, for an example look at JQuery.<br>
-its posible to chain the effects on a filter when you are creating them, for example
+[Method chaining](https://en.wikipedia.org/wiki/Method_chaining) is a programing style where each function returns the object it belongs to, for an example look at JQuery.<br>
+its possible to chain the effects on a filter when you are creating them, for example
 ```javascript
 image.filter(function(add){
   add.flood('black',0.5).composite(add.sourceAlpha,'in').offset(10).merge(add.source)
@@ -333,10 +333,9 @@ for more details check out each effects doc below
 
 #### in(effect)
   gets or sets the `in` attribute of the effect
-  some effect like [Blend](blend), [Composite](#composite), [DisplacementMap](displacementmap) have a `in2` function, it works the same as the as
 
   - **effect:** this can be another effect or a string <br>
-    if **effect** is not provided it will look for another effect on the same filter whos `result` is equal to this effects `in` attribute, else it will return the value of the `in` attribute
+    if **effect** is not provided it will look for another effect on the same filter whose `result` is equal to this effects `in` attribute, else it will return the value of the `in` attribute
     ```javascript
     image.filter(function(add){
       var offset = add.offset(10)
@@ -359,13 +358,14 @@ for more details check out each effects doc below
     ```
 
 #### in2(effect)
-  gets or sets the `in2` attribute of the effect
-  this function works the same as [in](#ineffect) and its only on effects [Blend](#blend), [Composite](#composite), and [DisplacementMap](#displacementmap)
+  gets or sets the `in2` attribute of the effect <br>
+  this function works the same as the [in](#ineffect) method. <br>
+  its only on effects ([Blend](#blend), [Composite](#composite), and [DisplacementMap](#displacementmap))
 
 #### result(string)
   gets or sets the `result` attribute of the effect
 
-  - **string:** if a string is provided it will set the value of the `result` attruibute. <br>
+  - **string:** if a string is provided it will set the value of the `result` attribute. <br>
     if no arguments are provided it will act as a getter and return the value of the `result` attribute
 
 ### Blend
@@ -422,7 +422,7 @@ new SVG.ComponentTransferEffect(components);
       type: "identity | table | discrete | linear | gamma",
 
       //type="table"
-      tableValues: "0 0.5 2 1", //number sperated by spaces
+      tableValues: "0 0.5 2 1", //number separated by spaces
 
       //type="linear"
       slope: 1, //number
@@ -557,7 +557,7 @@ new SVG.MergeEffect();
 - **Array**: an Array of effects or effect results `filter.merge([effectOne,"result-two",another_effect])`
 - **SVG.Set**: a set of effects
 - **arguments**: pass each effect or result in as arguments `filter.merge(effect,"some-result",anotherEffect)`
-- **chianing** you can also chian the merge effect `filter.offset(10).merge(anotherEffect)` will result in a merge effect with its first input set to the `offset` effect and its second input set to `anotherEffect`
+- **chianing** you can also chain the merge effect `filter.offset(10).merge(anotherEffect)` will result in a merge effect with its first input set to the `offset` effect and its second input set to `anotherEffect`
 
 ### Morphology
 
@@ -570,7 +570,7 @@ new SVG.MorphologyEffect(operator, radius);
 ```
 
 - **operator**: "erode | dilate"
-- **radius**: a single number or a string of two number sperated by a space
+- **radius**: a single number or a string of two number separated by a space
   - the first number is the X
   - the second number is the Y, if no provided it will default to the first number
 
