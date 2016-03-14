@@ -15,8 +15,6 @@ Svg.filter.js is licensed under the terms of the MIT License.
 ## Usage
 Include this plugin after including the svg.js library in your html document.
 
-For a few visual examples look at the [svg.js filter page](http://svgjs.com/filter).
-
 Here is how each filter effect on the example page is achieved.
 
 
