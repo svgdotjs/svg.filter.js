@@ -1,6 +1,6 @@
 # svg.filter.js
 
-A plugin for [svg.js](http://svgjs.com) adding filter functionality.
+A plugin for [svg.js](https://svgdotjs.github.io) adding filter functionality.
 
 Svg.filter.js is licensed under the terms of the MIT License.
 
