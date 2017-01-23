@@ -288,7 +288,7 @@ hueRotate.animate(3000).attr('values', 360)
 ### Chaining Effects
 
 [Method chaining](https://en.wikipedia.org/wiki/Method_chaining) is a programing style where each function returns the object it belongs to, for an example look at JQuery.<br>
-its possible to chain the effects on a filter when you are creating them, for example
+it's possible to chain the effects on a filter when you are creating them, for example:
 ```javascript
 image.filter(function(add){
   add.flood('black',0.5).composite(add.sourceAlpha,'in').offset(10).merge(add.source)
@@ -358,7 +358,7 @@ for more details check out each effects doc below
 #### in2(effect)
   gets or sets the `in2` attribute of the effect <br>
   this function works the same as the [in](#ineffect) method. <br>
-  its only on effects ([Blend](#blend), [Composite](#composite), and [DisplacementMap](#displacementmap))
+  it's only on effects ([Blend](#blend), [Composite](#composite), and [DisplacementMap](#displacementmap))
 
 #### result(string)
   gets or sets the `result` attribute of the effect
@@ -555,7 +555,7 @@ new SVG.MergeEffect();
 - **Array**: an Array of effects or effect results `filter.merge([effectOne,"result-two",another_effect])`
 - **SVG.Set**: a set of effects
 - **arguments**: pass each effect or result in as arguments `filter.merge(effect,"some-result",anotherEffect)`
-- **chianing** you can also chain the merge effect `filter.offset(10).merge(anotherEffect)` will result in a merge effect with its first input set to the `offset` effect and its second input set to `anotherEffect`
+- **chianing** you can also chain the merge effect `filter.offset(10).merge(anotherEffect)` which will result in a merge effect with its first input set to the `offset` effect and its second input set to `anotherEffect`
 
 ### Morphology
 
@@ -568,9 +568,9 @@ new SVG.MorphologyEffect(operator, radius);
 ```
 
 - **operator**: "erode | dilate"
-- **radius**: a single number or a string of two number separated by a space
+- **radius**: a single number or a string of two numbers separated by a space
   - the first number is the X
-  - the second number is the Y, if no provided it will default to the first number
+  - the second number is the Y, if no second number was provided it will default to the first number
 
 ### Offset
 
@@ -607,7 +607,7 @@ filter.tile();
 new SVG.TileEffect();
 ```
 
-***no arguments, but if you want to find out what it dose check out the W3 doc***
+***no arguments, but if you want to find out what it does check out the W3 doc***
 
 ### Turbulence
 
