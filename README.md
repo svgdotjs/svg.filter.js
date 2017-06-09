@@ -318,7 +318,7 @@ for more details check out each effects doc below
 - [DiffuseLighting](#diffuseLighting)
 - [DisplacementMap](#displacementmap)
 - [Flood](#flood)
-- [GaussianBlur](#gaussianglur)
+- [GaussianBlur](#gaussianblur)
 - [Image](#image)
 - [Merge](#merge)
 - [Morphology](#morphology)
