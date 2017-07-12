@@ -480,9 +480,9 @@ new SVG.ConvolveMatrixEffect(matrix);
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feDiffuseLightingElement)
 
 ```javascript
-filter.displacementMap(surfaceScale, diffuseConstant, kernelUnitLength);
+filter.diffuseLighting(surfaceScale, diffuseConstant, kernelUnitLength);
 //or
-new SVG.DisplacementMapEffect(surfaceScale, diffuseConstant, kernelUnitLength);
+new SVG.DiffuseLightingEffect(surfaceScale, diffuseConstant, kernelUnitLength);
 ```
 
 ***very complicated, just check out the W3 doc***
