@@ -315,7 +315,7 @@ for more details check out each effects doc below
 - [ComponentTransfer](#componenttransfer)
 - [Composite](#composite)
 - [ConvolveMatrix](#convolvematrix)
-- [DiffuseLighting](#diffuseLighting)
+- [DiffuseLighting](#diffuselighting)
 - [DisplacementMap](#displacementmap)
 - [Flood](#flood)
 - [GaussianBlur](#gaussianblur)
