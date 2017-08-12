@@ -590,9 +590,9 @@ new SVG.OffsetEffect(x, y);
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feSpecularLightingElement)
 
 ```javascript
-filter.specularLighting(surfaceScale, diffuseConstant, specularExponent, kernelUnitLength);
+filter.specularLighting(surfaceScale, specularConstant, specularExponent, kernelUnitLength);
 //or
-new SVG.SpecularLightingEffect(surfaceScale, diffuseConstant, specularExponent, kernelUnitLength);
+new SVG.SpecularLightingEffect(surfaceScale, specularConstant, specularExponent, kernelUnitLength);
 ```
 
 ***very complicated, just check out the W3 doc***
