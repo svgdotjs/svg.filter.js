@@ -1,6 +1,6 @@
 {
   "name": "svg.filter.js",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A plugin for svg.js adding filter functionality",
   "keywords": [
     "svg.js",
@@ -36,6 +36,6 @@
     "grunt": "~0.4.5"
   },
   "dependencies": {
-    "svg.js":"^2.2.5"
+    "svg.js": "^2.2.5"
   }
 }

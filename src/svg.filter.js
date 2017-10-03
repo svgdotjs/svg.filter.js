@@ -75,16 +75,16 @@
         return this.put(new SVG.MorphologyEffect(operator,radius))
       },
       // DiffuseLighting effect
-      diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength){
-        return this.put(new SVG.DiffuseLightingEffect(surfaceScale,diffuseConstant,kernelUnitLength))
+      diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength,lightingColor){
+        return this.put(new SVG.DiffuseLightingEffect(surfaceScale,diffuseConstant,kernelUnitLength,lightingColor))
       },
       // DisplacementMap effect
       displacementMap: function(in1,in2,scale,xChannelSelector,yChannelSelector){
         return this.put(new SVG.DisplacementMapEffect(in1,in2,scale,xChannelSelector,yChannelSelector))
       },
       // SpecularLighting effect
-      specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
-        return this.put(new SVG.SpecularLightingEffect(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength))
+      specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength,lightingColor){
+        return this.put(new SVG.SpecularLightingEffect(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength,lightingColor))
       },
       // Tile effect
       tile: function(){
@@ -240,16 +240,16 @@
       return this.parent() && this.parent().morphology(operator,radius).in(this)
     },
     // DiffuseLighting effect
-    diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength){
-      return this.parent() && this.parent().diffuseLighting(surfaceScale,diffuseConstant,kernelUnitLength).in(this)
+    diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength,lightingColor){
+      return this.parent() && this.parent().diffuseLighting(surfaceScale,diffuseConstant,kernelUnitLength,lightingColor).in(this)
     },
     // DisplacementMap effect
     displacementMap: function(in2,scale,xChannelSelector,yChannelSelector){
       return this.parent() && this.parent().displacementMap(this,in2,scale,xChannelSelector,yChannelSelector) //pass this as the first input
     },
     // SpecularLighting effect
-    specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
-      return this.parent() && this.parent().specularLighting(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength).in(this)
+    specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength,lightingColor){
+      return this.parent() && this.parent().specularLighting(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength,lightingColor).in(this)
     },
     // Tile effect
     tile: function(){
@@ -419,19 +419,21 @@
           this[c].attr(compontents[c])
       }
     },
-    diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength){
+    diffuseLighting: function(surfaceScale,diffuseConstant,kernelUnitLength,lightingColor){
       this.attr({
         surfaceScale: surfaceScale,
         diffuseConstant: diffuseConstant,
-        kernelUnitLength: kernelUnitLength
+        kernelUnitLength: kernelUnitLength,
+        'lighting-color': lightingColor
       })
     },
-    specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
+    specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength,lightingColor){
       this.attr({
         surfaceScale: surfaceScale,
         diffuseConstant: diffuseConstant,
         specularExponent: specularExponent,
-        kernelUnitLength: kernelUnitLength
+        kernelUnitLength: kernelUnitLength,
+        'lighting-color': lightingColor
       })
     },
   }
