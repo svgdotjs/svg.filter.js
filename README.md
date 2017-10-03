@@ -258,6 +258,25 @@ This will return the element to its original state but will retain the filter in
 image.unfilter(true)
 ```
 
+### creating a reusable filter
+its also posible to create a filter by using the `new` keyword
+*NOTE: when creating a filter this way, it dose NOT take any arguments*
+```javascript
+var filter = new SVG.Filter();
+
+// create the filters effects here
+filter.offset(20, 20).gaussianBlur(5);
+filter.blend(filter.source, blur);
+filter.size('200%','200%').move('-50%', '-50%')
+```
+then once you have created the filter you can use it one multiple elements
+```javascript
+var image = new SVG.Image();
+var shape = new SVG.Rect(10, 10);
+
+image.filter(filter);
+shape.filter(filter);
+```
 
 ### referencing the filter node
 An internal reference to the filter node is made in the element:
