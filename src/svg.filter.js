@@ -83,8 +83,8 @@
         return this.put(new SVG.DisplacementMapEffect(in1,in2,scale,xChannelSelector,yChannelSelector))
       },
       // SpecularLighting effect
-      specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
-        return this.put(new SVG.SpecularLightingEffect(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength))
+      specularLighting: function(surfaceScale,specularConstant,specularExponent,kernelUnitLength){
+        return this.put(new SVG.SpecularLightingEffect(surfaceScale,specularConstant,specularExponent,kernelUnitLength))
       },
       // Tile effect
       tile: function(){
@@ -248,8 +248,8 @@
       return this.parent() && this.parent().displacementMap(this,in2,scale,xChannelSelector,yChannelSelector) //pass this as the first input
     },
     // SpecularLighting effect
-    specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
-      return this.parent() && this.parent().specularLighting(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength).in(this)
+    specularLighting: function(surfaceScale,specularConstant,specularExponent,kernelUnitLength){
+      return this.parent() && this.parent().specularLighting(surfaceScale,specularConstant,specularExponent,kernelUnitLength).in(this)
     },
     // Tile effect
     tile: function(){
@@ -426,10 +426,10 @@
         kernelUnitLength: kernelUnitLength
       })
     },
-    specularLighting: function(surfaceScale,diffuseConstant,specularExponent,kernelUnitLength){
+    specularLighting: function(surfaceScale,specularConstant,specularExponent,kernelUnitLength){
       this.attr({
         surfaceScale: surfaceScale,
-        diffuseConstant: diffuseConstant,
+        specularConstant: specularConstant,
         specularExponent: specularExponent,
         kernelUnitLength: kernelUnitLength
       })
