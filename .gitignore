@@ -1,4 +1,3 @@
 .DS_Store
-examples.html
-translation.js
 node_modules
+dist
