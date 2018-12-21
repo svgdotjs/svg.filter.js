@@ -31,7 +31,7 @@
   "unpkg": "dist/svg.filter.min.js",
   "jsdelivr": "dist/svg.filter.min.js",
   "browser": "dist/svg.filter.min.js",
-  "module": "src/main.js",
+  "module": "src/svg.filter.js",
   "files": [
     "dist/"
   ],
