@@ -40,7 +40,7 @@ export default class Filter extends Element {
   // Unmask all masked elements and remove itself
   remove () {
     // unmask all targets
-    this.targets().unfilter()
+    this.targets().each('unfilter')
 
     // remove mask from parent
     return super.remove()
@@ -120,8 +120,6 @@ const updateFunctions = {
   },
   // Gaussian Blur effect
   gaussianBlur: function (x = 0, y = x) {
-    x = x || 0
-    y = y || x || 0
     this.attr('stdDeviation', x + ' ' + y)
   },
   // Morphology effect
