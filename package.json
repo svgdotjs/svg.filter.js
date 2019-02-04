@@ -1,6 +1,6 @@
 {
   "name": "@svgdotjs/svg.filter.js",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "A plugin for svg.js adding filter functionality",
   "keywords": [
     "svg.js",
@@ -32,9 +32,6 @@
   "jsdelivr": "dist/svg.filter.min.js",
   "browser": "dist/svg.filter.min.js",
   "module": "src/svg.filter.js",
-  "files": [
-    "dist/"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/svgdotjs/svg.filter.js.git"
