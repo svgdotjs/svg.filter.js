@@ -13,22 +13,22 @@ import {
 
 export default class Filter extends Element {
   constructor (node) {
-    super(nodeOrNew('filter', node))
+    super(nodeOrNew('filter', node), node)
 
-    this.source = 'SourceGraphic'
-    this.sourceAlpha = 'SourceAlpha'
-    this.background = 'BackgroundImage'
-    this.backgroundAlpha = 'BackgroundAlpha'
-    this.fill = 'FillPaint'
-    this.stroke = 'StrokePaint'
-    this.autoSetIn = true
+    this.$source = 'SourceGraphic'
+    this.$sourceAlpha = 'SourceAlpha'
+    this.$background = 'BackgroundImage'
+    this.$backgroundAlpha = 'BackgroundAlpha'
+    this.$fill = 'FillPaint'
+    this.$stroke = 'StrokePaint'
+    this.$autoSetIn = true
   }
 
   put (element, i) {
     element = super.put(element, i)
 
-    if (!element.attr('in') && this.autoSetIn) {
-      element.attr('in', this.source)
+    if (!element.attr('in') && this.$autoSetIn) {
+      element.attr('in', this.$source)
     }
     if (!element.attr('result')) {
       element.attr('result', element.id())
@@ -58,7 +58,7 @@ export default class Filter extends Element {
 // Create Effect class
 class Effect extends Element {
   constructor (node) {
-    super(node)
+    super(node, node)
     this.result(this.id())
   }
   in (effect) {
@@ -99,6 +99,8 @@ const updateFunctions = {
   blend: getAttrSetter(['in', 'in2', 'mode']),
   // ColorMatrix effect
   colorMatrix: getAttrSetter(['type', 'values']),
+  // Composite effect
+  composite: getAttrSetter(['in', 'in2', 'operator']),
   // ConvolveMatrix effect
   convolveMatrix: function (matrix) {
     matrix = new SVGArray(matrix).toString()
@@ -108,26 +110,26 @@ const updateFunctions = {
       kernelMatrix: matrix
     })
   },
-  // Composite effect
-  composite: getAttrSetter(['in', 'in2', 'operator']),
-  // Flood effect
-  flood: getAttrSetter(['color', 'opacity']),
-  // Offset effect
-  offset: getAttrSetter(['x', 'y']),
-  // Image effect
-  image: function (src) {
-    this.attr('href', src, ns.xlink)
-  },
-  // Gaussian Blur effect
-  gaussianBlur: function (x = 0, y = x) {
-    this.attr('stdDeviation', x + ' ' + y)
-  },
-  // Morphology effect
-  morphology: getAttrSetter(['operator', 'radius']),
   // DiffuseLighting effect
   diffuseLighting: getAttrSetter(['surfaceScale', 'lightingColor', 'diffuseConstant', 'kernelUnitLength']),
   // DisplacementMap effect
   displacementMap: getAttrSetter(['in', 'in2', 'scale', 'xChannelSelector', 'yChannelSelector']),
+  // DropShadow effect
+  dropShadow: getAttrSetter(['in', 'dx', 'dy', 'stdDeviation']),
+  // Flood effect
+  flood: getAttrSetter(['color', 'opacity']),
+  // Gaussian Blur effect
+  gaussianBlur: function (x = 0, y = x) {
+    this.attr('stdDeviation', x + ' ' + y)
+  },
+  // Image effect
+  image: function (src) {
+    this.attr('href', src, ns.xlink)
+  },
+  // Morphology effect
+  morphology: getAttrSetter(['operator', 'radius']),
+  // Offset effect
+  offset: getAttrSetter(['x', 'y']),
   // SpecularLighting effect
   specularLighting: getAttrSetter(['surfaceScale', 'lightingColor', 'diffuseConstant', 'specularExponent', 'kernelUnitLength']),
   // Tile effect
@@ -139,17 +141,18 @@ const updateFunctions = {
 const filterNames = [
   'blend',
   'colorMatrix',
-  'convolveMatrix',
   'componentTransfer',
   'composite',
-  'flood',
-  'offset',
-  'image',
-  'merge',
-  'gaussianBlur',
-  'morphology',
+  'convolveMatrix',
   'diffuseLighting',
   'displacementMap',
+  'dropShadow',
+  'flood',
+  'gaussianBlur',
+  'image',
+  'merge',
+  'morphology',
+  'offset',
   'specularLighting',
   'tile',
   'turbulence'
@@ -162,7 +165,7 @@ filterNames.forEach((effect) => {
 
   Filter[name + 'Effect'] = class extends Effect {
     constructor (node) {
-      super(nodeOrNew('fe' + name))
+      super(nodeOrNew('fe' + name, node), node)
     }
 
     // This function takes all parameters from the factory call
@@ -258,7 +261,7 @@ filterChildNodes.forEach((child) => {
   const name = utils.capitalize(child)
   Filter[name] = class extends Effect {
     constructor (node) {
-      super(nodeOrNew('fe' + name))
+      super(nodeOrNew('fe' + name, node), node)
     }
   }
 })
@@ -351,10 +354,6 @@ var chainingEffects = {
   colorMatrix: function (type, values) {
     return this.parent() && this.parent().colorMatrix(type, values).in(this)
   },
-  // ConvolveMatrix effect
-  convolveMatrix: function (matrix) {
-    return this.parent() && this.parent().convolveMatrix(matrix).in(this)
-  },
   // ComponentTransfer effect
   componentTransfer: function (components) {
     return this.parent() && this.parent().componentTransfer(components).in(this)
@@ -363,13 +362,29 @@ var chainingEffects = {
   composite: function (in2, operator) {
     return this.parent() && this.parent().composite(this, in2, operator) // pass this as the first input
   },
+  // ConvolveMatrix effect
+  convolveMatrix: function (matrix) {
+    return this.parent() && this.parent().convolveMatrix(matrix).in(this)
+  },
+  // DiffuseLighting effect
+  diffuseLighting: function (surfaceScale, lightingColor, diffuseConstant, kernelUnitLength) {
+    return this.parent() && this.parent().diffuseLighting(surfaceScale, diffuseConstant, kernelUnitLength).in(this)
+  },
+  // DisplacementMap effect
+  displacementMap: function (in2, scale, xChannelSelector, yChannelSelector) {
+    return this.parent() && this.parent().displacementMap(this, in2, scale, xChannelSelector, yChannelSelector) // pass this as the first input
+  },
+  // DisplacementMap effect
+  dropShadow: function (x, y, stdDeviation) {
+    return this.parent() && this.parent().dropShadow(this, x, y, stdDeviation).in(this) // pass this as the first input
+  },
   // Flood effect
   flood: function (color, opacity) {
     return this.parent() && this.parent().flood(color, opacity) // this effect dont have inputs
   },
-  // Offset effect
-  offset: function (x, y) {
-    return this.parent() && this.parent().offset(x, y).in(this)
+  // Gaussian Blur effect
+  gaussianBlur: function (x, y) {
+    return this.parent() && this.parent().gaussianBlur(x, y).in(this)
   },
   // Image effect
   image: function (src) {
@@ -380,21 +395,13 @@ var chainingEffects = {
     arg = arg instanceof Array ? arg : [...arg]
     return this.parent() && this.parent().merge(this, ...arg) // pass this as the first argument
   },
-  // Gaussian Blur effect
-  gaussianBlur: function (x, y) {
-    return this.parent() && this.parent().gaussianBlur(x, y).in(this)
-  },
   // Morphology effect
   morphology: function (operator, radius) {
     return this.parent() && this.parent().morphology(operator, radius).in(this)
   },
-  // DiffuseLighting effect
-  diffuseLighting: function (surfaceScale, lightingColor, diffuseConstant, kernelUnitLength) {
-    return this.parent() && this.parent().diffuseLighting(surfaceScale, diffuseConstant, kernelUnitLength).in(this)
-  },
-  // DisplacementMap effect
-  displacementMap: function (in2, scale, xChannelSelector, yChannelSelector) {
-    return this.parent() && this.parent().displacementMap(this, in2, scale, xChannelSelector, yChannelSelector) // pass this as the first input
+  // Offset effect
+  offset: function (x, y) {
+    return this.parent() && this.parent().offset(x, y).in(this)
   },
   // SpecularLighting effect
   specularLighting: function (surfaceScale, lightingColor, diffuseConstant, specularExponent, kernelUnitLength) {

@@ -9,6 +9,7 @@
   ],
   "bugs": "https://github.com/svgdotjs/svg.filter.js/issues",
   "license": "MIT",
+  "typings": "./svg.filter.js.d.ts",
   "author": {
     "name": "Wout Fierens"
   },
@@ -30,7 +31,7 @@
   "main": "dist/svg.filter.node.js",
   "unpkg": "dist/svg.filter.min.js",
   "jsdelivr": "dist/svg.filter.min.js",
-  "browser": "dist/svg.filter.min.js",
+  "browser": "src/svg.filter.js",
   "module": "src/svg.filter.js",
   "repository": {
     "type": "git",
@@ -76,6 +77,6 @@
     "jasmine-core": "^3.3.0"
   },
   "dependencies": {
-    "@svgdotjs/svg.js": "^3.0.5"
+    "@svgdotjs/svg.js": "3.0.11"
   }
 }
