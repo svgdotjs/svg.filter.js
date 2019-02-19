@@ -204,9 +204,9 @@ You will notice that all the effect descriptions have a drop shadow. Here is how
 var text = draw.text('SVG text with drop shadow').fill('#fff')
 
 text.filter(function(add) {
-  var blur = add.offset(0, 1).in(add.sourceAlpha).gaussianBlur(1)
+  var blur = add.offset(0, 1).in(add.$sourceAlpha).gaussianBlur(1)
 
-  add.blend(add.source, blur)
+  add.blend(add.$source, blur)
 })
 ```
 
@@ -216,9 +216,9 @@ This technique can be achieved on any other shape of course:
 var rect = draw.rect(100,100).fill('#f09').stroke({ width: 3, color: '#0f9' }).move(10,10)
 
 rect.filter(function(add) {
-  var blur = add.offset(20, 20).in(add.sourceAlpha).gaussianBlur(5)
+  var blur = add.offset(20, 20).in(add.$sourceAlpha).gaussianBlur(5)
 
-  add.blend(add.source, blur)
+  add.blend(add.$source, blur)
 
   this.size('200%','200%').move('-50%', '-50%')
 })
@@ -232,7 +232,7 @@ var rect = draw.rect(100,100).fill('#f09').stroke({ width: 3, color: '#0f9' }).m
 rect.filter(function(add) {
   var blur = add.offset(20, 20).gaussianBlur(5)
 
-  add.blend(add.source, blur)
+  add.blend(add.$source, blur)
 
   this.size('200%','200%').move('-50%', '-50%')
 })
@@ -251,13 +251,13 @@ image.filterWith(function(add){
   ]).attr({
     devisor: '2',
     preserveAlpha: 'false'
-  }).in(add.sourceAlpha)
+  }).in(add.$sourceAlpha)
 
   //recolor it
   var color = add.composite(add.flood('#ff2222'),matrix,'in');
 
   //merge all of them toggether
-  add.merge(color,add.source);
+  add.merge(color,add.$source);
 })
 ```
 
@@ -280,7 +280,7 @@ var filter = new SVG.Filter();
 
 // create the filters effects here
 filter.offset(20, 20).gaussianBlur(5);
-filter.blend(filter.source, blur);
+filter.blend(filter.$source, blur);
 filter.size('200%','200%').move('-50%', '-50%')
 ```
 then once you have created the filter you can use it one multiple elements
@@ -324,17 +324,17 @@ hueRotate.animate(3000).attr('values', 360)
 it's possible to chain the effects on a filter when you are creating them, for example:
 ```javascript
 image.filterWith(function(add){
-  add.flood('black',0.5).composite(add.sourceAlpha,'in').offset(10).merge(add.source)
+  add.flood('black',0.5).composite(add.$sourceAlpha,'in').offset(10).merge(add.$source)
 })
 ```
 
 this would create a basic shadow filter where the first input on the `composite` effect would be the `flood` effect, and the input on the offset effect would be the `composite` effect.<br>
-same with the `merge` effect, its first input would be the `offset` effect, and its second input would be `add.source`
+same with the `merge` effect, its first input would be the `offset` effect, and its second input would be `add.$source`
 
 some effects like [Merge](#merge), [Blend](blend), [Composite](#composite), [DisplacementMap](displacementmap) have thier arguments changed when they are chained, for example
 ```javascript
 image.filterWith(function(add){
-  add.flood('black',0.5).composite(add.sourceAlpha,'in')
+  add.flood('black',0.5).composite(add.$sourceAlpha,'in')
 })
 ```
 the `composite` effects first input is set to the `flood` effect and its second input becomes the first argument, this is the same for the merge, blend, composite, and displacmentMap effect. <br>
@@ -415,9 +415,9 @@ new SVG.BlendEffect({in1, in2, mode})
 
 **chaining** when this effect is called right after another effect, for example:
 ```javascript
-filter.offset(10).blend(filter.source)
+filter.offset(10).blend(filter.$source)
 ```
-the first input is set to the `offset` effect and the second input is set to `filter.source` or what ever was passed as the first argument, and the second input becomes the **mode**
+the first input is set to the `offset` effect and the second input is set to `filter.$source` or what ever was passed as the first argument, and the second input becomes the **mode**
 
 ### ColorMatrix
 
@@ -482,9 +482,9 @@ new SVG.CompositeEffect({in1, in2, operator});
 
 **chaining** when this effect is called right after another effect, for example:
 ```javascript
-filter.flood('black',0.5).composite(filter.sourceAlpha,'in')
+filter.flood('black',0.5).composite(filter.$sourceAlpha,'in')
 ```
-the first input is set to the `flood` effect and the second input is set to `filter.sourceAlpha` or what ever was passed as the first argument.<br>
+the first input is set to the `flood` effect and the second input is set to `filter.$sourceAlpha` or what ever was passed as the first argument.<br>
 also the second argument becomes the **operator**
 
 ### ConvolveMatrix
@@ -533,9 +533,9 @@ new SVG.DisplacementMapEffect({in1, in2, scale, xChannelSelector, yChannelSelect
 
 **chaining** when this effect is called right after another effect, for example:
 ```javascript
-filter.offset(20,50).displacementMap(filter.source,2)
+filter.offset(20,50).displacementMap(filter.$source,2)
 ```
-the first input is set to the `offset` effect and the second input is set to `filter.source` or what ever was passed as the first argument.<br>
+the first input is set to the `offset` effect and the second input is set to `filter.$source` or what ever was passed as the first argument.<br>
 also the second argument becomes the **scale**, and the third argument is the **xChannelSelector** and so on
 
 ### Flood
