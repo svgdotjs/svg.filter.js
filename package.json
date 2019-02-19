@@ -1,6 +1,6 @@
 {
   "name": "@svgdotjs/svg.filter.js",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "A plugin for svg.js adding filter functionality",
   "keywords": [
     "svg.js",
@@ -77,6 +77,6 @@
     "jasmine-core": "^3.3.0"
   },
   "dependencies": {
-    "@svgdotjs/svg.js": "3.0.11"
+    "@svgdotjs/svg.js": "3.0.12"
   }
 }
