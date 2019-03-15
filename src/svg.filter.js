@@ -129,7 +129,7 @@ const updateFunctions = {
   // Morphology effect
   morphology: getAttrSetter(['operator', 'radius']),
   // Offset effect
-  offset: getAttrSetter(['x', 'y']),
+  offset: getAttrSetter(['dx', 'dy']),
   // SpecularLighting effect
   specularLighting: getAttrSetter(['surfaceScale', 'lightingColor', 'diffuseConstant', 'specularExponent', 'kernelUnitLength']),
   // Tile effect
@@ -400,8 +400,8 @@ var chainingEffects = {
     return this.parent() && this.parent().morphology(operator, radius).in(this)
   },
   // Offset effect
-  offset: function (x, y) {
-    return this.parent() && this.parent().offset(x, y).in(this)
+  offset: function (dx, dy) {
+    return this.parent() && this.parent().offset(dx, dy).in(this)
   },
   // SpecularLighting effect
   specularLighting: function (surfaceScale, lightingColor, diffuseConstant, specularExponent, kernelUnitLength) {
