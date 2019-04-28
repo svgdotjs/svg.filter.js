@@ -117,7 +117,7 @@ const updateFunctions = {
   // DropShadow effect
   dropShadow: getAttrSetter(['in', 'dx', 'dy', 'stdDeviation']),
   // Flood effect
-  flood: getAttrSetter(['color', 'opacity']),
+  flood: getAttrSetter(['flood-color', 'flood-opacity']),
   // Gaussian Blur effect
   gaussianBlur: function (x = 0, y = x) {
     this.attr('stdDeviation', x + ' ' + y)
