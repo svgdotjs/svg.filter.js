@@ -61,6 +61,7 @@ class Effect extends Element {
     super(node, node)
     this.result(this.id())
   }
+
   in (effect) {
     // Act as getter
     if (effect == null) {
@@ -72,10 +73,12 @@ class Effect extends Element {
     // Avr as setter
     return this.attr('in', effect)
   }
+
   // Named result
   result (result) {
     return this.attr('result', result)
   }
+
   // Stringification
   toString () {
     return this.result()
@@ -237,7 +240,7 @@ extend(Filter, {
       }
     }
 
-    for (let c in components) {
+    for (const c in components) {
       // components[c] has to hold an attributes object
       node.add(new Filter['Func' + c.toUpperCase()](components[c]))
     }
@@ -445,8 +448,9 @@ extend([Filter.CompositeEffect, Filter.BlendEffect, Filter.DisplacementMapEffect
 
 // Presets
 Filter.filter = {
-  sepiatone: [ 0.343, 0.669, 0.119, 0, 0,
+  sepiatone: [
+    0.343, 0.669, 0.119, 0, 0,
     0.249, 0.626, 0.130, 0, 0,
     0.172, 0.334, 0.111, 0, 0,
-    0.000, 0.000, 0.000, 1, 0 ]
+    0.000, 0.000, 0.000, 1, 0]
 }
