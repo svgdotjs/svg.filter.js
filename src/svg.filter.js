@@ -265,6 +265,11 @@ filterChildNodes.forEach((child) => {
   Filter[name] = class extends Effect {
     constructor (node) {
       super(nodeOrNew('fe' + name, node), node)
+      if (node) {
+        for (const key in node) {
+          this.attr(key, node[key])
+        }
+      }
     }
   }
 })
