@@ -203,7 +203,7 @@ You will notice that all the effect descriptions have a drop shadow. Here is how
 ```javascript
 var text = draw.text('SVG text with drop shadow').fill('#fff')
 
-text.filter(function(add) {
+text.filterWith(function(add) {
   var blur = add.offset(0, 1).in(add.$sourceAlpha).gaussianBlur(1)
 
   add.blend(add.$source, blur)
@@ -215,7 +215,7 @@ This technique can be achieved on any other shape of course:
 ```javascript
 var rect = draw.rect(100,100).fill('#f09').stroke({ width: 3, color: '#0f9' }).move(10,10)
 
-rect.filter(function(add) {
+rect.filterWith(function(add) {
   var blur = add.offset(20, 20).in(add.$sourceAlpha).gaussianBlur(5)
 
   add.blend(add.$source, blur)
@@ -229,7 +229,7 @@ If the drop shadow should get the colour of the shape so it appears like coloure
 ```javascript
 var rect = draw.rect(100,100).fill('#f09').stroke({ width: 3, color: '#0f9' }).move(10,10)
 
-rect.filter(function(add) {
+rect.filterWith(function(add) {
   var blur = add.offset(20, 20).gaussianBlur(5)
 
   add.blend(add.$source, blur)
