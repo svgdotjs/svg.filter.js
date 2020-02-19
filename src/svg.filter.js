@@ -57,8 +57,8 @@ export default class Filter extends Element {
 
 // Create Effect class
 class Effect extends Element {
-  constructor (node) {
-    super(node, node)
+  constructor (node, attr) {
+    super(node, attr)
     this.result(this.id())
   }
 
