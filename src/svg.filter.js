@@ -212,7 +212,7 @@ extend(Filter, {
     }
 
     // Check if first child is an array, otherwise use arguments as array
-    var children = arrayOrFn instanceof Array ? arrayOrFn : [...arguments]
+    const children = arrayOrFn instanceof Array ? arrayOrFn : [...arguments]
 
     children.forEach((child) => {
       if (child instanceof Filter.MergeNode) {
@@ -313,7 +313,7 @@ extend(Filter.MergeEffect, {
 extend(Defs, {
   // Define filter
   filter: function (block) {
-    var filter = this.put(new Filter())
+    const filter = this.put(new Filter())
 
     /* invoke passed block */
     if (typeof block === 'function') { block.call(filter, filter) }
@@ -333,7 +333,8 @@ extend(Element, {
   // Create filter element in defs and store reference
   filterWith: function (block) {
     const filter = block instanceof Filter
-      ? block : this.defs().filter(block)
+      ? block
+      : this.defs().filter(block)
 
     return this.attr('filter', filter)
   },
@@ -348,7 +349,7 @@ extend(Element, {
 })
 
 // chaining
-var chainingEffects = {
+const chainingEffects = {
   // Blend effect
   blend: function (in2, mode) {
     return this.parent() && this.parent().blend(this, in2, mode) // pass this as the first input

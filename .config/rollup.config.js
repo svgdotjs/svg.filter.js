@@ -1,10 +1,9 @@
-import babel from 'rollup-plugin-babel'
 import * as pkg from '../package.json'
+import babel from '@rollup/plugin-babel'
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
-// import { terser } from 'rollup-plugin-terser'
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import { uglify } from 'rollup-plugin-uglify'
+import { terser } from 'rollup-plugin-terser'
 
 const buildDate = Date()
 
@@ -21,41 +20,63 @@ const headerLong = `/*!
 
 const headerShort = `/*! ${pkg.name} v${pkg.version} ${pkg.license}*/;`
 
-const getBabelConfig = (targets, corejs = false) => babel({
-  include: 'src/**',
-  runtimeHelpers: true,
-  babelrc: false,
-  presets: [['@babel/preset-env', {
-    modules: false,
-    targets: targets || pkg.browserslist,
-    //useBuiltIns: 'usage'
-  }]],
-  plugins: [['@babel/plugin-transform-runtime', {
-    corejs: corejs,
-    helpers: true,
-    useESModules: true
-  }]]
-})
+const getBabelConfig = (node = false) => {
+
+  let targets = pkg.browserslist
+  const plugins = [
+    ['@babel/transform-runtime', {
+      version: "^7.14.5",
+      regenerator: false,
+      useESModules: true
+    }],
+    ["polyfill-corejs3", {
+      "method": "usage-pure"
+    }]
+  ]
+
+  if (node) {
+    targets = 'maintained node versions'
+  }
+
+  return babel({
+    include: 'src/**',
+    babelHelpers: 'runtime',
+    babelrc: false,
+    targets: targets,
+    presets: [['@babel/preset-env', {
+      modules: false,
+      // useBuildins and plugin-transform-runtime are mutually exclusive
+      // https://github.com/babel/babel/issues/10271#issuecomment-528379505
+      // use babel-polyfills when released
+      useBuiltIns: false,
+      bugfixes: true,
+      loose: true
+    }]],
+    plugins
+  })
+}
 
 // When few of these get mangled nothing works anymore
 // We loose literally nothing by let these unmangled
 const classes = [
-
+  'Filter'
 ]
 
-const config = (node, min) => ({
+const config = (node, min, esm = false) => ({
   external: ['@svgdotjs/svg.js'],
   input: 'src/svg.filter.js',
   output: {
-    file: node ? './dist/svg.filter.node.js'
+    file: esm ? './dist/svg.esm.js'
+      : node ? './dist/svg.filter.node.js'
       : min ? './dist/svg.filter.min.js'
-        : './dist/svg.filter.js',
-    format: node ? 'cjs' : 'iife',
+      : './dist/svg.filter.js',
+    format: esm ? 'esm' : node ? 'cjs' : 'iife',
     name: 'SVG.Filter',
     sourcemap: true,
     banner: headerLong,
     // remove Object.freeze
     freeze: false,
+    exports: 'auto',
     globals: {
       '@svgdotjs/svg.js': 'SVG',
     },
@@ -65,11 +86,11 @@ const config = (node, min) => ({
     propertyReadSideEffects: false
   },
   plugins: [
-    resolve(),
+    resolve({ browser: !node }),
     commonjs(),
-    getBabelConfig(node && 'maintained node versions'),
+    getBabelConfig(node),
     filesize(),
-    !min ? {} : uglify({
+    !min ? {} : terser({
       mangle: {
         reserved: classes
       },
