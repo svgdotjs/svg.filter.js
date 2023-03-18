@@ -106,7 +106,7 @@ declare module "@svgdotjs/svg.js" {
   }
 
   interface LightEffects {
-    distandLight (attr?: Object | SVGFEDistantLightElement): DistantLight
+    distantLight (attr?: Object | SVGFEDistantLightElement): DistantLight
     pointLight (attr?: Object | SVGFEPointLightElement): PointLight
     spotLight (attr?: Object | SVGFESpotLightElement): SpotLight
   }
@@ -153,7 +153,7 @@ declare module "@svgdotjs/svg.js" {
     constructor (node: SVGFEDiffuseLightingElement)
     constructor (attr: Object)
 
-    distandLight (attr?: Object | SVGFEDistantLightElement): DistantLight
+    distantLight (attr?: Object | SVGFEDistantLightElement): DistantLight
     pointLight (attr?: Object | SVGFEPointLightElement): PointLight
     spotLight (attr?: Object | SVGFESpotLightElement): SpotLight
   }
@@ -207,7 +207,7 @@ declare module "@svgdotjs/svg.js" {
     constructor (node: SVGFESpecularLightingElement)
     constructor (attr: Object)
 
-    distandLight (attr?: Object | SVGFEDistantLightElement): DistantLight
+    distantLight (attr?: Object | SVGFEDistantLightElement): DistantLight
     pointLight (attr?: Object | SVGFEPointLightElement): PointLight
     spotLight (attr?: Object | SVGFESpotLightElement): SpotLight
   }
