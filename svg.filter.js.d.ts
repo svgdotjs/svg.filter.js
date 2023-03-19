@@ -95,7 +95,7 @@ declare module "@svgdotjs/svg.js" {
     convolveMatrix (matrix: Array<number> | string): ConvolveMatrixEffect
     diffuseLighting (surfaceScale: number, lightingColor: string, diffuseConstant: number, kernelUnitLength: number): DiffuseLightingEffect
     displacementMap (in2: EffectOrString, scale: number, xChannelSelector: string, yChannelSelector: string): DisplacementMapEffect
-    dropShadow (in2: EffectOrString, dx: number, dy: number, stdDeviation: number, color: string, opacity: number): DropShadowEffect
+    dropShadow (dx: number, dy: number, stdDeviation: number, color: string, opacity: number): DropShadowEffect
     flood (color: string, opacity: number): FloodEffect
     gaussianBlur (x: number, y: number): GaussianBlurEffect
     image (src: string): ImageEffect
