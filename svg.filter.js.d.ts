@@ -32,7 +32,7 @@ declare module "@svgdotjs/svg.js" {
     convolveMatrix (matrix: Array<number> | string): ConvolveMatrixEffect
     diffuseLighting (surfaceScale: number, lightingColor: string, diffuseConstant: number, kernelUnitLength: number): DiffuseLightingEffect
     displacementMap (in1: EffectOrString, in2: EffectOrString, scale: number, xChannelSelector: string, yChannelSelector: string): DisplacementMapEffect
-    dropShadow (in1: EffectOrString, dx: number, dy: number, stdDeviation: number): DropShadowEffect
+    dropShadow (in1: EffectOrString, dx: number, dy: number, stdDeviation: number, color: string, opacity: number): DropShadowEffect
     flood (color: string, opacity: number): FloodEffect
     gaussianBlur (x: number, y: number): GaussianBlurEffect
     image (src: string): ImageEffect
@@ -50,6 +50,8 @@ declare module "@svgdotjs/svg.js" {
     readonly dy: SVGAnimatedNumber;
     readonly stdDeviationX: SVGAnimatedNumber;
     readonly stdDeviationY: SVGAnimatedNumber;
+    readonly color: SVGAnimatedString;
+    readonly opacity: SVGAnimatedNumber;
     setStdDeviation(stdDeviationX: number, stdDeviationY: number): void;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEDisplacementMapElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -93,7 +95,7 @@ declare module "@svgdotjs/svg.js" {
     convolveMatrix (matrix: Array<number> | string): ConvolveMatrixEffect
     diffuseLighting (surfaceScale: number, lightingColor: string, diffuseConstant: number, kernelUnitLength: number): DiffuseLightingEffect
     displacementMap (in2: EffectOrString, scale: number, xChannelSelector: string, yChannelSelector: string): DisplacementMapEffect
-    dropShadow (dx: number, dy: number, stdDeviation: number): DropShadowEffect
+    dropShadow (dx: number, dy: number, stdDeviation: number, color: string, opacity: number): DropShadowEffect
     flood (color: string, opacity: number): FloodEffect
     gaussianBlur (x: number, y: number): GaussianBlurEffect
     image (src: string): ImageEffect
