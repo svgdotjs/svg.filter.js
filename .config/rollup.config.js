@@ -67,7 +67,7 @@ const config = (node, min, esm = false) => ({
   input: 'src/svg.filter.js',
   output: {
     file: esm ? './dist/svg.esm.js'
-      : node ? './dist/svg.filter.node.js'
+      : node ? './dist/svg.filter.node.cjs'
       : min ? './dist/svg.filter.min.js'
       : './dist/svg.filter.js',
     format: esm ? 'esm' : node ? 'cjs' : 'iife',

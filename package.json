@@ -28,15 +28,29 @@
     }
   ],
   "homepage": "https://github.com/svgdotjs/svg.filter.js",
-  "main": "dist/svg.filter.node.js",
+  "type": "module",
+  "main": "dist/svg.filter.node.cjs",
   "unpkg": "dist/svg.filter.min.js",
   "jsdelivr": "dist/svg.filter.min.js",
   "browser": "src/svg.filter.js",
   "module": "src/svg.filter.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./svg.filter.js.d.ts",
+        "default": "./src/svg.filter.js"
+      },
+      "require": {
+        "types": "./svg.filter.js.d.cts",
+        "default": "./dist/svg.filter.node.cjs"
+      }
+    }
+  },
   "files": [
     "/dist",
     "/src",
-    "/svg.filter.js.d.ts"
+    "/svg.filter.js.d.ts",
+    "/svg.filter.js.d.cts"
   ],
   "repository": {
     "type": "git",
