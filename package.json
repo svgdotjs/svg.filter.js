@@ -36,9 +36,11 @@
   "exports": {
     ".": {
       "import": {
+        "types": "./svg.filter.js.d.ts",
         "default": "./src/svg.filter.js"
       },
       "require": {
+        "types": "./svg.filter.js.d.ts",
         "default": "./dist/svg.filter.node.js"
       }
     }
