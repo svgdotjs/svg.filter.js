@@ -33,6 +33,16 @@
   "jsdelivr": "dist/svg.filter.min.js",
   "browser": "src/svg.filter.js",
   "module": "src/svg.filter.js",
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./src/svg.filter.js"
+      },
+      "require": {
+        "default": "./dist/svg.filter.node.js"
+      }
+    }
+  },
   "files": [
     "/dist",
     "/src",
