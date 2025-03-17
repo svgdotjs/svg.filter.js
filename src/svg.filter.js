@@ -118,7 +118,7 @@ const updateFunctions = {
   // DisplacementMap effect
   displacementMap: getAttrSetter(['in', 'in2', 'scale', 'xChannelSelector', 'yChannelSelector']),
   // DropShadow effect
-  dropShadow: getAttrSetter(['in', 'dx', 'dy', 'stdDeviation']),
+  dropShadow: getAttrSetter(['in', 'dx', 'dy', 'stdDeviation', 'flood-color', 'flood-opacity']),
   // Flood effect
   flood: getAttrSetter(['flood-color', 'flood-opacity']),
   // Gaussian Blur effect
@@ -378,9 +378,9 @@ const chainingEffects = {
   displacementMap: function (in2, scale, xChannelSelector, yChannelSelector) {
     return this.parent() && this.parent().displacementMap(this, in2, scale, xChannelSelector, yChannelSelector) // pass this as the first input
   },
-  // DisplacementMap effect
-  dropShadow: function (x, y, stdDeviation) {
-    return this.parent() && this.parent().dropShadow(this, x, y, stdDeviation).in(this) // pass this as the first input
+  // DropShadow effect
+  dropShadow: function (x, y, stdDeviation, color, opacity) {
+    return this.parent() && this.parent().dropShadow(this, x, y, stdDeviation, color, opacity).in(this) // pass this as the first input
   },
   // Flood effect
   flood: function (color, opacity) {
