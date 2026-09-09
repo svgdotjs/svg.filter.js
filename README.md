@@ -363,7 +363,16 @@ for more details check out each effects doc below
 ### Base Effect Class
 
 #### in(effect)
-  gets or sets the `in` attribute of the effect
+  gets or sets the `in` attribute of the effect.
+  It mirrors the [`in` attribute](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/in) of the underlying SVG filter primitive: it selects which input (another effect's `result`, or a keyword such as `SourceGraphic`) this effect reads from.
+
+  For example, chaining a drop shadow with an explicit `SourceGraphic` input:
+  ```javascript
+  image.filterWith(function(add) {
+    add.gaussianBlur(2).dropShadow(5, 5, 3).in('SourceGraphic')
+  })
+  ```
+  Here `.in('SourceGraphic')` (equivalently `.in(add.$source)`) forces the drop shadow to use the original graphic instead of the blurred result.
 
   - **effect:** this can be another effect or a string <br>
     if **effect** is not provided it will look for another effect on the same filter whose `result` is equal to this effects `in` attribute, else it will return the value of the `in` attribute
