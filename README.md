@@ -59,6 +59,7 @@ Here is how each filter effect on the example page is achieved.
 - [gamma correct 2](#gamma-correct-2)
 - [drop shadow](#drop-shadow)
 - [extrude](#extrude)
+- [diffuse lighting](#diffuse-lighting)
 
 ### original
 
@@ -271,6 +272,17 @@ image.filterWith(function(add){
   add.merge(color,add.$source);
 })
 ```
+
+### diffuse lighting
+```javascript
+image.filterWith(function(add) {
+  add.diffuseLighting(2, 'white', 1).pointLight({ x: 100, y: 100, z: 50 })
+})
+```
+
+A `fePointLight` (or `feDistantLight` / `feSpotLight`) child is added to the
+`feDiffuseLighting` element via the `pointLight`, `distantLight` and
+`spotLight` factories.
 
 
 ## Furthermore
