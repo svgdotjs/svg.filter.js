@@ -295,6 +295,13 @@ The `unfilter` method removes the filter attribute from the node:
 image.unfilter()
 ```
 
+Pass `true` to also remove the referenced `<filter>` element from the DOM.
+By default the filter node is kept so it can be reused:
+
+```javascript
+image.unfilter(true)
+```
+
 ### creating a reusable filter
 its also posible to create a filter by using the `new` keyword
 *NOTE: when creating a filter this way, it can take an optional attr object*
