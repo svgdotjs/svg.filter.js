@@ -12,6 +12,28 @@ describe('Filter', function() {
     expect(canvas.filter()).toEqual(jasmine.any(SVG.Filter))
   })
 
+  describe('unfilter', function() {
+    it('removes the filter attribute but keeps the filter element by default', function() {
+      rect.filterWith(function(add) {
+        add.gaussianBlur(3)
+      })
+      var filter = rect.filterer()
+      rect.unfilter()
+      expect(rect.attr('filter')).toBeFalsy()
+      expect(filter.parent()).not.toBe(null)
+    })
+
+    it('removes the filter element from the DOM when remove is truthy', function() {
+      rect.filterWith(function(add) {
+        add.gaussianBlur(3)
+      })
+      var filter = rect.filterer()
+      rect.unfilter(true)
+      expect(rect.attr('filter')).toBeFalsy()
+      expect(filter.parent()).toBe(null)
+    })
+  })
+
   describe('source', function() {
     it('returns "SourceGraphic" string', function() {
       rect.filterWith(function(add) {

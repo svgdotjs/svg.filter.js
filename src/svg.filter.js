@@ -340,8 +340,16 @@ extend(Element, {
   },
   // Remove filter
   unfilter: function (remove) {
+    const filter = this.filterer()
+
     /* remove filter attribute */
-    return this.attr('filter', null)
+    this.attr('filter', null)
+
+    if (remove && filter) {
+      filter.remove()
+    }
+
+    return this
   },
   filterer () {
     return this.reference('filter')

@@ -275,7 +275,7 @@ declare module "@svgdotjs/svg.js" {
   interface Element {
     filterWith(filterOrFn?: Filter | ((filter: Filter) => void)): this
     filterer(): Filter | null
-    unfilter(): this
+    unfilter(remove?: boolean): this
   }
 
   interface Defs {
