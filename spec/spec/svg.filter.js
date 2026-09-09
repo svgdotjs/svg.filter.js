@@ -224,4 +224,56 @@ describe('effects',function(){
       expect(filter.get(1).attr('in2')).toBe(filter.source)
     })
   })
+
+  describe('DropShadow', function() {
+    it('sets dx, dy and stdDeviation positionally', function() {
+      var filter = new SVG.Filter()
+      var effect = filter.dropShadow(filter.$sourceAlpha, 2, 3, 4)
+      expect(effect.attr('in')).toBe(filter.$sourceAlpha)
+      expect(effect.attr('dx')).toBe(2)
+      expect(effect.attr('dy')).toBe(3)
+      expect(effect.attr('stdDeviation')).toBe(4)
+      expect(effect.attr('flood-color')).toBe(undefined)
+      effect.remove()
+      filter.remove()
+    })
+
+    it('accepts a trailing options object with floodColor/floodOpacity', function() {
+      var filter = new SVG.Filter()
+      var effect = filter.dropShadow(filter.$sourceAlpha, 2, 3, 4, { floodColor: 'red', floodOpacity: 0.5 })
+      expect(effect.attr('dx')).toBe(2)
+      expect(effect.attr('flood-color')).toBe('red')
+      expect(effect.attr('flood-opacity')).toBe(0.5)
+      effect.remove()
+      filter.remove()
+    })
+
+    it('passes hyphenated flood-color/flood-opacity keys through', function() {
+      var filter = new SVG.Filter()
+      var effect = filter.dropShadow(filter.$sourceAlpha, 2, 3, 4, { 'flood-color': '#00ff00', 'flood-opacity': 0.8 })
+      expect(effect.attr('flood-color')).toBe('#00ff00')
+      expect(effect.attr('flood-opacity')).toBe(0.8)
+      effect.remove()
+      filter.remove()
+    })
+
+    it('keeps old positional calls working without color attrs', function() {
+      var filter = new SVG.Filter()
+      var effect = filter.dropShadow(filter.$sourceAlpha, 2, 3, 4)
+      expect(effect.attr('flood-color')).toBe(undefined)
+      expect(effect.attr('flood-opacity')).toBe(undefined)
+      effect.remove()
+      filter.remove()
+    })
+
+    it('forwards the options object when chaining', function() {
+      var filter = new SVG.Filter()
+      filter.offset(10).dropShadow(2, 3, 4, { floodColor: 'red', floodOpacity: 0.5 })
+      var effect = filter.get(1)
+      expect(effect.attr('in')).toBe(filter.get(0).result())
+      expect(effect.attr('flood-color')).toBe('red')
+      expect(effect.attr('flood-opacity')).toBe(0.5)
+      filter.remove()
+    })
+  })
 })

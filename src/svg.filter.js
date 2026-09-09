@@ -98,6 +98,26 @@ const getAttrSetter = (params) => {
   }
 }
 
+const isPlainObject = (o) => o && o.constructor === Object && !(o instanceof Array)
+
+// Maps a trailing options object { floodColor, floodOpacity } to the
+// feDropShadow presentation attributes flood-color/flood-opacity.
+// Hyphenated keys ({ 'flood-color', 'flood-opacity' }) pass through as-is.
+// Extra keys pass through untouched for forward compatibility.
+const dropShadowColorAttrs = (options) => {
+  const attrs = {}
+  if (options['flood-color'] != null) attrs['flood-color'] = options['flood-color']
+  else if (options.floodColor != null) attrs['flood-color'] = options.floodColor
+  if (options['flood-opacity'] != null) attrs['flood-opacity'] = options['flood-opacity']
+  else if (options.floodOpacity != null) attrs['flood-opacity'] = options.floodOpacity
+  for (const key in options) {
+    if (['floodColor', 'floodOpacity', 'flood-color', 'flood-opacity'].indexOf(key) === -1) {
+      attrs[key] = options[key]
+    }
+  }
+  return attrs
+}
+
 const updateFunctions = {
   blend: getAttrSetter(['in', 'in2', 'mode']),
   // ColorMatrix effect
@@ -118,7 +138,21 @@ const updateFunctions = {
   // DisplacementMap effect
   displacementMap: getAttrSetter(['in', 'in2', 'scale', 'xChannelSelector', 'yChannelSelector']),
   // DropShadow effect
-  dropShadow: getAttrSetter(['in', 'dx', 'dy', 'stdDeviation']),
+  // Positional args stay (in, dx, dy, stdDeviation) for backward compatibility.
+  // update() also accepts a trailing options object { floodColor, floodOpacity },
+  // but the factory intercepts it first (see override below) so wrapWithAttrCheck
+  // does not swallow it as a generic attr object.
+  dropShadow: function (...args) {
+    const last = args[args.length - 1]
+    let options = null
+    if (isPlainObject(last)) {
+      options = args.pop()
+    }
+    getAttrSetter(['in', 'dx', 'dy', 'stdDeviation']).apply(this, args)
+    if (options) {
+      this.attr(dropShadowColorAttrs(options))
+    }
+  },
   // Flood effect
   flood: getAttrSetter(['flood-color', 'flood-opacity']),
   // Gaussian Blur effect
@@ -197,6 +231,24 @@ filterNames.forEach((effect) => {
     return this.put(effect).update(args)
   })
 })
+
+// dropShadow factory override: pull a trailing options object out before
+// wrapWithAttrCheck consumes it as a generic attr object, so that
+// { floodColor, floodOpacity } lands on the real flood-color/flood-opacity
+// presentation attributes instead of literal floodColor/floodOpacity ones
+const dropShadowFactory = Filter.prototype.dropShadow
+Filter.prototype.dropShadow = function (...args) {
+  const last = args[args.length - 1]
+  let options = null
+  if (isPlainObject(last)) {
+    options = args.pop()
+  }
+  const effect = dropShadowFactory.apply(this, args)
+  if (options) {
+    effect.attr(dropShadowColorAttrs(options))
+  }
+  return effect
+}
 
 // Correct factories which are not that simple
 extend(Filter, {
@@ -378,9 +430,18 @@ const chainingEffects = {
   displacementMap: function (in2, scale, xChannelSelector, yChannelSelector) {
     return this.parent() && this.parent().displacementMap(this, in2, scale, xChannelSelector, yChannelSelector) // pass this as the first input
   },
-  // DisplacementMap effect
-  dropShadow: function (x, y, stdDeviation) {
-    return this.parent() && this.parent().dropShadow(this, x, y, stdDeviation).in(this) // pass this as the first input
+  // DropShadow effect
+  dropShadow: function (x, y, stdDeviation, options) {
+    // Allow a trailing options object { floodColor, floodOpacity }
+    // which may take the stdDeviation position when stdDeviation is omitted.
+    // The factory maps it to flood-color/flood-opacity, so just forward it.
+    if (isPlainObject(stdDeviation)) {
+      options = stdDeviation
+      stdDeviation = undefined
+    }
+    const args = [this, x, y, stdDeviation]
+    if (options != null) args.push(options)
+    return this.parent() && this.parent().dropShadow(...args).in(this) // pass this as the first input
   },
   // Flood effect
   flood: function (color, opacity) {

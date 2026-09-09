@@ -3,6 +3,14 @@ import {Element, List} from '@svgdotjs/svg.js'
 declare module "@svgdotjs/svg.js" {
 
   type EffectOrString = Effect | string
+  type DropShadowOptions = {
+    floodColor?: string
+    floodOpacity?: number
+    'flood-color'?: string
+    'flood-opacity'?: number
+  } & {
+    [key: string]: any
+  }
   type componentsOrFn = {
     r: number,
     g: number,
@@ -32,7 +40,8 @@ declare module "@svgdotjs/svg.js" {
     convolveMatrix (matrix: Array<number> | string): ConvolveMatrixEffect
     diffuseLighting (surfaceScale: number, lightingColor: string, diffuseConstant: number, kernelUnitLength: number): DiffuseLightingEffect
     displacementMap (in1: EffectOrString, in2: EffectOrString, scale: number, xChannelSelector: string, yChannelSelector: string): DisplacementMapEffect
-    dropShadow (in1: EffectOrString, dx: number, dy: number, stdDeviation: number): DropShadowEffect
+    dropShadow (in1: EffectOrString, dx: number, dy: number, stdDeviation: number, options?: DropShadowOptions): DropShadowEffect
+    dropShadow (dx: number, dy: number, stdDeviation: number, options?: DropShadowOptions): DropShadowEffect
     flood (color: string, opacity: number): FloodEffect
     gaussianBlur (x: number, y: number): GaussianBlurEffect
     image (src: string): ImageEffect
@@ -93,7 +102,7 @@ declare module "@svgdotjs/svg.js" {
     convolveMatrix (matrix: Array<number> | string): ConvolveMatrixEffect
     diffuseLighting (surfaceScale: number, lightingColor: string, diffuseConstant: number, kernelUnitLength: number): DiffuseLightingEffect
     displacementMap (in2: EffectOrString, scale: number, xChannelSelector: string, yChannelSelector: string): DisplacementMapEffect
-    dropShadow (dx: number, dy: number, stdDeviation: number): DropShadowEffect
+    dropShadow (dx: number, dy: number, stdDeviation?: number, options?: DropShadowOptions): DropShadowEffect
     flood (color: string, opacity: number): FloodEffect
     gaussianBlur (x: number, y: number): GaussianBlurEffect
     image (src: string): ImageEffect

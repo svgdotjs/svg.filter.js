@@ -350,6 +350,7 @@ for more details check out each effects doc below
 - [ConvolveMatrix](#convolvematrix)
 - [DiffuseLighting](#diffuselighting)
 - [DisplacementMap](#displacementmap)
+- [DropShadow](#dropshadow)
 - [Flood](#flood)
 - [GaussianBlur](#gaussianblur)
 - [Image](#image)
@@ -537,6 +538,36 @@ filter.offset(20,50).displacementMap(filter.$source,2)
 ```
 the first input is set to the `offset` effect and the second input is set to `filter.$source` or what ever was passed as the first argument.<br>
 also the second argument becomes the **scale**, and the third argument is the **xChannelSelector** and so on
+
+### DropShadow
+
+[W3 doc](https://www.w3.org/TR/SVG/filters.html#feDropShadowElement)
+
+```javascript
+filter.dropShadow(dx, dy, stdDeviation, { floodColor, floodOpacity });
+filter.dropShadow(in1, dx, dy, stdDeviation, { floodColor, floodOpacity });
+```
+
+- **dx**: shadow offset on the X axis
+- **dy**: shadow offset on the Y axis
+- **stdDeviation**: blur radius of the shadow
+- **options** (optional trailing object, backward compatible):
+  - **floodColor**: shadow color, sets the `flood-color` attribute (e.g. `'red'`, `'#ff0000'`)
+  - **floodOpacity**: shadow opacity from 0 to 1, sets the `flood-opacity` attribute
+
+CSS-like colored shadow example:
+
+```javascript
+rect.filterWith(function(add) {
+  add.dropShadow(5, 5, 3, { floodColor: 'rgba(255, 0, 0, 1)', floodOpacity: 0.5 })
+})
+```
+
+**chaining** works the same, with the previous effect used as input:
+
+```javascript
+filter.offset(5).dropShadow(5, 5, 3, { floodColor: 'red', floodOpacity: 0.5 })
+```
 
 ### Flood
 
