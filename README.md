@@ -170,7 +170,7 @@ image.filterWith(function(add) {
 ```javascript
 image.filterWith(function(add) {
   add.componentTransfer({
-    type: 'table'
+    type: 'table',
     tableValues: [1, 0]
   })
 })
