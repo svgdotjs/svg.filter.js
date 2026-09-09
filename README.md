@@ -26,6 +26,17 @@ npm i @svgdotjs/svg.filter.js
 yarn add @svgdotjs/svg.filter.js
 ```
 
+### Script tag
+
+No bundler needed. Grab `svg.filter.min.js` from the
+[release zip](https://github.com/svgdotjs/svg.filter.js/releases)
+(or via unpkg / jsdelivr) and include it after svg.js:
+
+```html
+<script src="svg.min.js"></script>
+<script src="svg.filter.min.js"></script>
+```
+
 Include this plugin after including the svg.js library in your html document.
 
 Here is how each filter effect on the example page is achieved.
