@@ -372,7 +372,7 @@ const chainingEffects = {
   },
   // DiffuseLighting effect
   diffuseLighting: function (surfaceScale, lightingColor, diffuseConstant, kernelUnitLength) {
-    return this.parent() && this.parent().diffuseLighting(surfaceScale, diffuseConstant, kernelUnitLength).in(this)
+    return this.parent() && this.parent().diffuseLighting(surfaceScale, lightingColor, diffuseConstant, kernelUnitLength).in(this)
   },
   // DisplacementMap effect
   displacementMap: function (in2, scale, xChannelSelector, yChannelSelector) {
@@ -409,7 +409,7 @@ const chainingEffects = {
   },
   // SpecularLighting effect
   specularLighting: function (surfaceScale, lightingColor, diffuseConstant, specularExponent, kernelUnitLength) {
-    return this.parent() && this.parent().specularLighting(surfaceScale, diffuseConstant, specularExponent, kernelUnitLength).in(this)
+    return this.parent() && this.parent().specularLighting(surfaceScale, lightingColor, diffuseConstant, specularExponent, kernelUnitLength).in(this)
   },
   // Tile effect
   tile: function () {
