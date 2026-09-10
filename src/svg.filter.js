@@ -12,7 +12,7 @@ import {
 } from '@svgdotjs/svg.js'
 
 export default class Filter extends Element {
-  constructor (node) {
+  constructor(node) {
     super(nodeOrNew('filter', node), node)
 
     this.$source = 'SourceGraphic'
@@ -24,7 +24,7 @@ export default class Filter extends Element {
     this.$autoSetIn = true
   }
 
-  put (element, i) {
+  put(element, i) {
     element = super.put(element, i)
 
     if (!element.attr('in') && this.$autoSetIn) {
@@ -38,7 +38,7 @@ export default class Filter extends Element {
   }
 
   // Unmask all masked elements and remove itself
-  remove () {
+  remove() {
     // unmask all targets
     this.targets().each('unfilter')
 
@@ -46,23 +46,23 @@ export default class Filter extends Element {
     return super.remove()
   }
 
-  targets () {
+  targets() {
     return find('svg [filter*="' + this.id() + '"]')
   }
 
-  toString () {
+  toString() {
     return 'url(#' + this.id() + ')'
   }
 }
 
 // Create Effect class
 class Effect extends Element {
-  constructor (node, attr) {
+  constructor(node, attr) {
     super(node, attr)
     this.result(this.id())
   }
 
-  in (effect) {
+  in(effect) {
     // Act as getter
     if (effect == null) {
       const _in = this.attr('in')
@@ -75,12 +75,12 @@ class Effect extends Element {
   }
 
   // Named result
-  result (result) {
+  result(result) {
     return this.attr('result', result)
   }
 
   // Stringification
-  toString () {
+  toString() {
     return this.result()
   }
 }
@@ -114,9 +114,20 @@ const updateFunctions = {
     })
   },
   // DiffuseLighting effect
-  diffuseLighting: getAttrSetter(['surfaceScale', 'lightingColor', 'diffuseConstant', 'kernelUnitLength']),
+  diffuseLighting: getAttrSetter([
+    'surfaceScale',
+    'lightingColor',
+    'diffuseConstant',
+    'kernelUnitLength'
+  ]),
   // DisplacementMap effect
-  displacementMap: getAttrSetter(['in', 'in2', 'scale', 'xChannelSelector', 'yChannelSelector']),
+  displacementMap: getAttrSetter([
+    'in',
+    'in2',
+    'scale',
+    'xChannelSelector',
+    'yChannelSelector'
+  ]),
   // DropShadow effect
   dropShadow: getAttrSetter(['in', 'dx', 'dy', 'stdDeviation']),
   // Flood effect
@@ -134,11 +145,23 @@ const updateFunctions = {
   // Offset effect
   offset: getAttrSetter(['dx', 'dy']),
   // SpecularLighting effect
-  specularLighting: getAttrSetter(['surfaceScale', 'lightingColor', 'diffuseConstant', 'specularExponent', 'kernelUnitLength']),
+  specularLighting: getAttrSetter([
+    'surfaceScale',
+    'lightingColor',
+    'diffuseConstant',
+    'specularExponent',
+    'kernelUnitLength'
+  ]),
   // Tile effect
   tile: getAttrSetter([]),
   // Turbulence effect
-  turbulence: getAttrSetter(['baseFrequency', 'numOctaves', 'seed', 'stitchTiles', 'type'])
+  turbulence: getAttrSetter([
+    'baseFrequency',
+    'numOctaves',
+    'seed',
+    'stitchTiles',
+    'type'
+  ])
 }
 
 const filterNames = [
@@ -167,13 +190,13 @@ filterNames.forEach((effect) => {
   const fn = updateFunctions[effect]
 
   Filter[name + 'Effect'] = class extends Effect {
-    constructor (node) {
+    constructor(node) {
       super(nodeOrNew('fe' + name, node), node)
     }
 
     // This function takes all parameters from the factory call
     // and updates the attributes according to the updateFunctions
-    update (args) {
+    update(args) {
       fn.apply(this, args)
       return this
     }
@@ -200,7 +223,7 @@ filterNames.forEach((effect) => {
 
 // Correct factories which are not that simple
 extend(Filter, {
-  merge (arrayOrFn) {
+  merge(arrayOrFn) {
     const node = this.put(new Filter.MergeEffect())
 
     // If a function was passed, execute it
@@ -224,7 +247,7 @@ extend(Filter, {
 
     return node
   },
-  componentTransfer (components = {}) {
+  componentTransfer(components = {}) {
     const node = this.put(new Filter.ComponentTransferEffect())
 
     if (typeof components === 'function') {
@@ -236,7 +259,10 @@ extend(Filter, {
     if (!components.r && !components.g && !components.b && !components.a) {
       const temp = components
       components = {
-        r: temp, g: temp, b: temp, a: temp
+        r: temp,
+        g: temp,
+        b: temp,
+        a: temp
       }
     }
 
@@ -263,18 +289,13 @@ const filterChildNodes = [
 filterChildNodes.forEach((child) => {
   const name = utils.capitalize(child)
   Filter[name] = class extends Effect {
-    constructor (node) {
+    constructor(node) {
       super(nodeOrNew('fe' + name, node), node)
     }
   }
 })
 
-const componentFuncs = [
-  'funcR',
-  'funcG',
-  'funcB',
-  'funcA'
-]
+const componentFuncs = ['funcR', 'funcG', 'funcB', 'funcA']
 
 // Add an update function for componentTransfer-children
 componentFuncs.forEach(function (c) {
@@ -286,11 +307,7 @@ componentFuncs.forEach(function (c) {
   Filter.ComponentTransferEffect.prototype[c] = fn
 })
 
-const lights = [
-  'distantLight',
-  'pointLight',
-  'spotLight'
-]
+const lights = ['distantLight', 'pointLight', 'spotLight']
 
 // Add light sources factories to lightining effects
 lights.forEach((light) => {
@@ -304,7 +321,7 @@ lights.forEach((light) => {
 })
 
 extend(Filter.MergeEffect, {
-  mergeNode (_in) {
+  mergeNode(_in) {
     return this.put(new Filter.MergeNode()).attr('in', _in)
   }
 })
@@ -316,7 +333,9 @@ extend(Defs, {
     const filter = this.put(new Filter())
 
     /* invoke passed block */
-    if (typeof block === 'function') { block.call(filter, filter) }
+    if (typeof block === 'function') {
+      block.call(filter, filter)
+    }
 
     return filter
   }
@@ -332,9 +351,7 @@ extend(Container, {
 extend(Element, {
   // Create filter element in defs and store reference
   filterWith: function (block) {
-    const filter = block instanceof Filter
-      ? block
-      : this.defs().filter(block)
+    const filter = block instanceof Filter ? block : this.defs().filter(block)
 
     return this.attr('filter', filter)
   },
@@ -351,7 +368,7 @@ extend(Element, {
 
     return this
   },
-  filterer () {
+  filterer() {
     return this.reference('filter')
   }
 })
@@ -379,16 +396,43 @@ const chainingEffects = {
     return this.parent() && this.parent().convolveMatrix(matrix).in(this)
   },
   // DiffuseLighting effect
-  diffuseLighting: function (surfaceScale, lightingColor, diffuseConstant, kernelUnitLength) {
-    return this.parent() && this.parent().diffuseLighting(surfaceScale, lightingColor, diffuseConstant, kernelUnitLength).in(this)
+  diffuseLighting: function (
+    surfaceScale,
+    lightingColor,
+    diffuseConstant,
+    kernelUnitLength
+  ) {
+    return (
+      this.parent() &&
+      this.parent()
+        .diffuseLighting(
+          surfaceScale,
+          lightingColor,
+          diffuseConstant,
+          kernelUnitLength
+        )
+        .in(this)
+    )
   },
   // DisplacementMap effect
   displacementMap: function (in2, scale, xChannelSelector, yChannelSelector) {
-    return this.parent() && this.parent().displacementMap(this, in2, scale, xChannelSelector, yChannelSelector) // pass this as the first input
+    return (
+      this.parent() &&
+      this.parent().displacementMap(
+        this,
+        in2,
+        scale,
+        xChannelSelector,
+        yChannelSelector
+      )
+    ) // pass this as the first input
   },
   // DisplacementMap effect
   dropShadow: function (x, y, stdDeviation) {
-    return this.parent() && this.parent().dropShadow(this, x, y, stdDeviation).in(this) // pass this as the first input
+    return (
+      this.parent() &&
+      this.parent().dropShadow(this, x, y, stdDeviation).in(this)
+    ) // pass this as the first input
   },
   // Flood effect
   flood: function (color, opacity) {
@@ -416,8 +460,25 @@ const chainingEffects = {
     return this.parent() && this.parent().offset(dx, dy).in(this)
   },
   // SpecularLighting effect
-  specularLighting: function (surfaceScale, lightingColor, diffuseConstant, specularExponent, kernelUnitLength) {
-    return this.parent() && this.parent().specularLighting(surfaceScale, lightingColor, diffuseConstant, specularExponent, kernelUnitLength).in(this)
+  specularLighting: function (
+    surfaceScale,
+    lightingColor,
+    diffuseConstant,
+    specularExponent,
+    kernelUnitLength
+  ) {
+    return (
+      this.parent() &&
+      this.parent()
+        .specularLighting(
+          surfaceScale,
+          lightingColor,
+          diffuseConstant,
+          specularExponent,
+          kernelUnitLength
+        )
+        .in(this)
+    )
   },
   // Tile effect
   tile: function () {
@@ -425,7 +486,12 @@ const chainingEffects = {
   },
   // Turbulence effect
   turbulence: function (baseFrequency, numOctaves, seed, stitchTiles, type) {
-    return this.parent() && this.parent().turbulence(baseFrequency, numOctaves, seed, stitchTiles, type).in(this)
+    return (
+      this.parent() &&
+      this.parent()
+        .turbulence(baseFrequency, numOctaves, seed, stitchTiles, type)
+        .in(this)
+    )
   }
 }
 
@@ -444,22 +510,24 @@ extend(Filter.MergeEffect, {
   }
 })
 
-extend([Filter.CompositeEffect, Filter.BlendEffect, Filter.DisplacementMapEffect], {
-  in2: function (effect) {
-    if (effect == null) {
-      const in2 = this.attr('in2')
-      const ref = this.parent() && this.parent().find(`[result="${in2}"]`)[0]
-      return ref || in2
+extend(
+  [Filter.CompositeEffect, Filter.BlendEffect, Filter.DisplacementMapEffect],
+  {
+    in2: function (effect) {
+      if (effect == null) {
+        const in2 = this.attr('in2')
+        const ref = this.parent() && this.parent().find(`[result="${in2}"]`)[0]
+        return ref || in2
+      }
+      return this.attr('in2', effect)
     }
-    return this.attr('in2', effect)
   }
-})
+)
 
 // Presets
 Filter.filter = {
   sepiatone: [
-    0.343, 0.669, 0.119, 0, 0,
-    0.249, 0.626, 0.130, 0, 0,
-    0.172, 0.334, 0.111, 0, 0,
-    0.000, 0.000, 0.000, 1, 0]
+    0.343, 0.669, 0.119, 0, 0, 0.249, 0.626, 0.13, 0, 0, 0.172, 0.334, 0.111, 0,
+    0, 0.0, 0.0, 0.0, 1, 0
+  ]
 }

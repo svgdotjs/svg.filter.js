@@ -6,10 +6,10 @@ svg.filter.js is licensed under the terms of the MIT License.
 
 - [Examples](#examples)
 - [Furthermore](#furthermore)
-    - [unfilter](#unfilter)
-    - [referencing the filter node](#referencing-the-filter-node)
-    - [Animating filter values](#animating-filter-values)
-    - [Chaining Effects](#chaining-effects)
+  - [unfilter](#unfilter)
+  - [referencing the filter node](#referencing-the-filter-node)
+  - [Animating filter values](#animating-filter-values)
+  - [Chaining Effects](#chaining-effects)
 - [Effect Classes](#effect-classes)
 
 ## Usage
@@ -41,8 +41,8 @@ Include this plugin after including the svg.js library in your html document.
 
 Here is how each filter effect on the example page is achieved.
 
-
 ## Examples
+
 - [gaussian blur](#gaussian-blur)
 - [horizontal blur](#horizontal-blur)
 - [desaturate](#desaturate)
@@ -70,7 +70,7 @@ var image = draw.image('path/to/image.jpg').size(300, 300)
 ### gaussian blur
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.gaussianBlur(30)
 })
 ```
@@ -78,7 +78,7 @@ image.filterWith(function(add) {
 ### horizontal blur
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.gaussianBlur(30, 0)
 })
 ```
@@ -86,7 +86,7 @@ image.filterWith(function(add) {
 ### desaturate
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.colorMatrix('saturate', 0)
 })
 ```
@@ -94,7 +94,7 @@ image.filterWith(function(add) {
 ### contrast
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   var amount = 1.5
 
   add.componentTransfer({
@@ -108,18 +108,21 @@ image.filterWith(function(add) {
 ### sepiatone
 
 ```javascript
-image.filterWith(function(add) {
-  add.colorMatrix('matrix', [ .343, .669, .119, 0, 0
-                            , .249, .626, .130, 0, 0
-                            , .172, .334, .111, 0, 0
-                            , .000, .000, .000, 1, 0 ])
+image.filterWith(function (add) {
+  add.colorMatrix(
+    'matrix',
+    [
+      0.343, 0.669, 0.119, 0, 0, 0.249, 0.626, 0.13, 0, 0, 0.172, 0.334, 0.111,
+      0, 0, 0.0, 0.0, 0.0, 1, 0
+    ]
+  )
 })
 ```
 
 ### hue rotate 180
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.colorMatrix('hueRotate', 180)
 })
 ```
@@ -127,7 +130,7 @@ image.filterWith(function(add) {
 ### luminance to alpha
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.colorMatrix('luminanceToAlpha')
 })
 ```
@@ -135,18 +138,18 @@ image.filterWith(function(add) {
 ### colorize
 
 ```javascript
-image.filterWith(function(add) {
-  add.colorMatrix('matrix', [ 1.0, 0,   0,   0,   0
-                            , 0,   0.2, 0,   0,   0
-                            , 0,   0,   0.2, 0,   0
-                            , 0,   0,   0,   1.0, 0 ])
+image.filterWith(function (add) {
+  add.colorMatrix(
+    'matrix',
+    [1.0, 0, 0, 0, 0, 0, 0.2, 0, 0, 0, 0, 0, 0.2, 0, 0, 0, 0, 0, 1.0, 0]
+  )
 })
 ```
 
 ### posterize
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.componentTransfer({
     type: 'discrete',
     tableValues: [0, 0.2, 0.4, 0.6, 0.8, 1]
@@ -157,7 +160,7 @@ image.filterWith(function(add) {
 ### darken
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.componentTransfer({
     type: 'linear',
     slope: 0.2
@@ -168,7 +171,7 @@ image.filterWith(function(add) {
 ### lighten
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.componentTransfer({
     type: 'linear',
     slope: 1.5,
@@ -180,7 +183,7 @@ image.filterWith(function(add) {
 ### invert
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.componentTransfer({
     type: 'table',
     tableValues: [1, 0]
@@ -191,7 +194,7 @@ image.filterWith(function(add) {
 ### gamma correct 1
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.componentTransfer({
     g: { type: 'gamma', amplitude: 1, exponent: 0.5 }
   })
@@ -201,21 +204,21 @@ image.filterWith(function(add) {
 ### gamma correct 2
 
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.componentTransfer({
     g: { type: 'gamma', amplitude: 1, exponent: 0.5, offset: -0.1 }
   })
 })
 ```
 
-
 ### drop shadow
+
 You will notice that all the effect descriptions have a drop shadow. Here is how this drop shadow can be achieved:
 
 ```javascript
 var text = draw.text('SVG text with drop shadow').fill('#fff')
 
-text.filterWith(function(add) {
+text.filterWith(function (add) {
   var blur = add.offset(0, 1).in(add.$sourceAlpha).gaussianBlur(1)
 
   add.blend(add.$source, blur)
@@ -225,57 +228,66 @@ text.filterWith(function(add) {
 This technique can be achieved on any other shape of course:
 
 ```javascript
-var rect = draw.rect(100,100).fill('#f09').stroke({ width: 3, color: '#0f9' }).move(10,10)
+var rect = draw
+  .rect(100, 100)
+  .fill('#f09')
+  .stroke({ width: 3, color: '#0f9' })
+  .move(10, 10)
 
-rect.filterWith(function(add) {
+rect.filterWith(function (add) {
   var blur = add.offset(20, 20).in(add.$sourceAlpha).gaussianBlur(5)
 
   add.blend(add.$source, blur)
 
-  this.size('200%','200%').move('-50%', '-50%')
+  this.size('200%', '200%').move('-50%', '-50%')
 })
 ```
 
 If the drop shadow should get the colour of the shape so it appears like coloured glass:
 
 ```javascript
-var rect = draw.rect(100,100).fill('#f09').stroke({ width: 3, color: '#0f9' }).move(10,10)
+var rect = draw
+  .rect(100, 100)
+  .fill('#f09')
+  .stroke({ width: 3, color: '#0f9' })
+  .move(10, 10)
 
-rect.filterWith(function(add) {
+rect.filterWith(function (add) {
   var blur = add.offset(20, 20).gaussianBlur(5)
 
   add.blend(add.$source, blur)
 
-  this.size('200%','200%').move('-50%', '-50%')
+  this.size('200%', '200%').move('-50%', '-50%')
 })
 ```
 
 ### extrude
+
 ```javascript
-image.filterWith(function(add){
-  var matrix = add.convolveMatrix([
-    1,0,0,0,0,0,
-    0,1,0,0,0,0,
-    0,0,1,0,0,0,
-    0,0,0,1,0,0,
-    0,0,0,0,1,0,
-    0,0,0,0,0,1
-  ]).attr({
-    devisor: '2',
-    preserveAlpha: 'false'
-  }).in(add.$sourceAlpha)
+image.filterWith(function (add) {
+  var matrix = add
+    .convolveMatrix([
+      1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+      0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1
+    ])
+    .attr({
+      devisor: '2',
+      preserveAlpha: 'false'
+    })
+    .in(add.$sourceAlpha)
 
   //recolor it
-  var color = add.composite(add.flood('#ff2222'),matrix,'in');
+  var color = add.composite(add.flood('#ff2222'), matrix, 'in')
 
   //merge all of them toggether
-  add.merge(color,add.$source);
+  add.merge(color, add.$source)
 })
 ```
 
 ### diffuse lighting
+
 ```javascript
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   add.diffuseLighting(2, 'white', 1).pointLight({ x: 100, y: 100, z: 50 })
 })
 ```
@@ -284,11 +296,12 @@ A `fePointLight` (or `feDistantLight` / `feSpotLight`) child is added to the
 `feDiffuseLighting` element via the `pointLight`, `distantLight` and
 `spotLight` factories.
 
-
 ## Furthermore
+
 Some more features you should know about.
 
 ### unfilter
+
 The `unfilter` method removes the filter attribute from the node:
 
 ```javascript
@@ -303,26 +316,31 @@ image.unfilter(true)
 ```
 
 ### creating a reusable filter
+
 its also posible to create a filter by using the `new` keyword
-*NOTE: when creating a filter this way, it can take an optional attr object*
+_NOTE: when creating a filter this way, it can take an optional attr object_
+
 ```javascript
-var filter = new SVG.Filter();
+var filter = new SVG.Filter()
 
 // create the filters effects here
-filter.offset(20, 20).gaussianBlur(5);
-filter.blend(filter.$source, blur);
-filter.size('200%','200%').move('-50%', '-50%')
+filter.offset(20, 20).gaussianBlur(5)
+filter.blend(filter.$source, blur)
+filter.size('200%', '200%').move('-50%', '-50%')
 ```
-then once you have created the filter you can use it one multiple elements
-```javascript
-var image = new SVG.Image();
-var shape = new SVG.Rect(10, 10);
 
-image.filterWith(filter);
-shape.filterWith(filter);
+then once you have created the filter you can use it one multiple elements
+
+```javascript
+var image = new SVG.Image()
+var shape = new SVG.Rect(10, 10)
+
+image.filterWith(filter)
+shape.filterWith(filter)
 ```
 
 ### referencing the filter node
+
 An internal reference to the filter node is made in the element:
 
 ```javascript
@@ -336,12 +354,13 @@ otherimage.filterWith(image.filterer())
 ```
 
 ### Animating filter values
+
 Every filter value can be animated as well:
 
 ```javascript
 var hueRotate
 
-image.filterWith(function(add) {
+image.filterWith(function (add) {
   hueRotate = add.colorMatrix('hueRotate', 0)
 })
 
@@ -352,9 +371,14 @@ hueRotate.animate(3000).attr('values', 360)
 
 [Method chaining](https://en.wikipedia.org/wiki/Method_chaining) is a programing style where each function returns the object it belongs to, for an example look at JQuery.<br>
 it's possible to chain the effects on a filter when you are creating them, for example:
+
 ```javascript
-image.filterWith(function(add){
-  add.flood('black',0.5).composite(add.$sourceAlpha,'in').offset(10).merge(add.$source)
+image.filterWith(function (add) {
+  add
+    .flood('black', 0.5)
+    .composite(add.$sourceAlpha, 'in')
+    .offset(10)
+    .merge(add.$source)
 })
 ```
 
@@ -362,11 +386,13 @@ this would create a basic shadow filter where the first input on the `composite`
 same with the `merge` effect, its first input would be the `offset` effect, and its second input would be `add.$source`
 
 some effects like [Merge](#merge), [Blend](blend), [Composite](#composite), [DisplacementMap](displacementmap) have thier arguments changed when they are chained, for example
+
 ```javascript
-image.filterWith(function(add){
-  add.flood('black',0.5).composite(add.$sourceAlpha,'in')
+image.filterWith(function (add) {
+  add.flood('black', 0.5).composite(add.$sourceAlpha, 'in')
 })
 ```
+
 the `composite` effects first input is set to the `flood` effect and its second input becomes the first argument, this is the same for the merge, blend, composite, and displacmentMap effect. <br>
 for more details check out each effects doc below
 
@@ -393,50 +419,55 @@ for more details check out each effects doc below
 ### Base Effect Class
 
 #### in(effect)
-  gets or sets the `in` attribute of the effect.
-  It mirrors the [`in` attribute](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/in) of the underlying SVG filter primitive: it selects which input (another effect's `result`, or a keyword such as `SourceGraphic`) this effect reads from.
 
-  For example, chaining a drop shadow with an explicit `SourceGraphic` input:
+gets or sets the `in` attribute of the effect.
+It mirrors the [`in` attribute](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/in) of the underlying SVG filter primitive: it selects which input (another effect's `result`, or a keyword such as `SourceGraphic`) this effect reads from.
+
+For example, chaining a drop shadow with an explicit `SourceGraphic` input:
+
+```javascript
+image.filterWith(function (add) {
+  add.gaussianBlur(2).dropShadow(5, 5, 3).in('SourceGraphic')
+})
+```
+
+Here `.in('SourceGraphic')` (equivalently `.in(add.$source)`) forces the drop shadow to use the original graphic instead of the blurred result.
+
+- **effect:** this can be another effect or a string <br>
+  if **effect** is not provided it will look for another effect on the same filter whose `result` is equal to this effects `in` attribute, else it will return the value of the `in` attribute
   ```javascript
-  image.filterWith(function(add) {
-    add.gaussianBlur(2).dropShadow(5, 5, 3).in('SourceGraphic')
+  image.filterWith(function (add) {
+    var offset = add.offset(10)
+
+    //create the blur effect and then set its input
+    var blur = add.gaussianBlur(3)
+
+    //set the input to an effect
+    blur.in(offset)
+
+    //this will return the offset effect
+    var input = blur.in()
+
+    //set the input to a string
+    blur.in('another-result-as-a-string')
+
+    //this will return a string since there is no other effect which has a matching result attribute
+    var input2 = blur.in()
   })
   ```
-  Here `.in('SourceGraphic')` (equivalently `.in(add.$source)`) forces the drop shadow to use the original graphic instead of the blurred result.
-
-  - **effect:** this can be another effect or a string <br>
-    if **effect** is not provided it will look for another effect on the same filter whose `result` is equal to this effects `in` attribute, else it will return the value of the `in` attribute
-    ```javascript
-    image.filterWith(function(add){
-      var offset = add.offset(10)
-
-      //create the blur effect and then set its input
-      var blur = add.gaussianBlur(3)
-
-      //set the input to an effect
-      blur.in(offset)
-
-      //this will return the offset effect
-      var input = blur.in()
-
-      //set the input to a string
-      blur.in('another-result-as-a-string')
-
-      //this will return a string since there is no other effect which has a matching result attribute
-      var input2 = blur.in()
-    })
-    ```
 
 #### in2(effect)
-  gets or sets the `in2` attribute of the effect <br>
-  this function works the same as the [in](#ineffect) method. <br>
-  it's only on effects ([Blend](#blend), [Composite](#composite), and [DisplacementMap](#displacementmap))
+
+gets or sets the `in2` attribute of the effect <br>
+this function works the same as the [in](#ineffect) method. <br>
+it's only on effects ([Blend](#blend), [Composite](#composite), and [DisplacementMap](#displacementmap))
 
 #### result(string)
-  gets or sets the `result` attribute of the effect
 
-  - **string:** if a string is provided it will set the value of the `result` attribute. <br>
-    if no arguments are provided it will act as a getter and return the value of the `result` attribute
+gets or sets the `result` attribute of the effect
+
+- **string:** if a string is provided it will set the value of the `result` attribute. <br>
+  if no arguments are provided it will act as a getter and return the value of the `result` attribute
 
 ### Blend
 
@@ -445,7 +476,7 @@ for more details check out each effects doc below
 ```javascript
 filter.blend(in1, in2, mode)
 //or
-new SVG.BlendEffect({in1, in2, mode})
+new SVG.BlendEffect({ in1, in2, mode })
 ```
 
 - **in1**: an effect or the result of effect
@@ -453,9 +484,11 @@ new SVG.BlendEffect({in1, in2, mode})
 - **mode**: "normal | multiply | screen | darken | lighten" defaults to "normal"
 
 **chaining** when this effect is called right after another effect, for example:
+
 ```javascript
 filter.offset(10).blend(filter.$source)
 ```
+
 the first input is set to the `offset` effect and the second input is set to `filter.$source` or what ever was passed as the first argument, and the second input becomes the **mode**
 
 ### ColorMatrix
@@ -463,9 +496,9 @@ the first input is set to the `offset` effect and the second input is set to `fi
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feColorMatrixElement)
 
 ```javascript
-filter.colorMatrix(type, values);
+filter.colorMatrix(type, values)
 //or
-new SVG.ColorMatrixEffect({type, values});
+new SVG.ColorMatrixEffect({ type, values })
 ```
 
 - **type**: "matrix | saturate | hueRotate | luminanceToAlpha"
@@ -510,9 +543,9 @@ new SVG.ComponentTransferEffect();
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feCompositeElement)
 
 ```javascript
-filter.composite(in1, in2, operator);
+filter.composite(in1, in2, operator)
 //or
-new SVG.CompositeEffect({in1, in2, operator});
+new SVG.CompositeEffect({ in1, in2, operator })
 ```
 
 - **in1**: an effect or the result of an effect
@@ -520,9 +553,11 @@ new SVG.CompositeEffect({in1, in2, operator});
 - **operator**: "over | in | out | atop | xor | arithmetic" defaults to "over"
 
 **chaining** when this effect is called right after another effect, for example:
+
 ```javascript
-filter.flood('black',0.5).composite(filter.$sourceAlpha,'in')
+filter.flood('black', 0.5).composite(filter.$sourceAlpha, 'in')
 ```
+
 the first input is set to the `flood` effect and the second input is set to `filter.$sourceAlpha` or what ever was passed as the first argument.<br>
 also the second argument becomes the **operator**
 
@@ -531,19 +566,15 @@ also the second argument becomes the **operator**
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feConvolveMatrixElement)
 
 ```javascript
-filter.convolveMatrix(matrix);
+filter.convolveMatrix(matrix)
 //or
-new SVG.ConvolveMatrixEffect({matrix});
+new SVG.ConvolveMatrixEffect({ matrix })
 ```
 
 - **matrix**: a square matrix of numbers that will be applied to the image
   - exmaple:
   ```javascript
-  [
-    1,0,0,
-    0,1,0,
-    0,0,1
-  ]
+  ;[1, 0, 0, 0, 1, 0, 0, 0, 1]
   ```
 
 ### DiffuseLighting
@@ -551,29 +582,47 @@ new SVG.ConvolveMatrixEffect({matrix});
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feDiffuseLightingElement)
 
 ```javascript
-filter.diffuseLighting(surfaceScale, lightingColor, diffuseConstant, kernelUnitLength);
+filter.diffuseLighting(
+  surfaceScale,
+  lightingColor,
+  diffuseConstant,
+  kernelUnitLength
+)
 //or
-new SVG.DiffuseLightingEffect({surfaceScale, lightingColor, diffuseConstant, kernelUnitLength});
+new SVG.DiffuseLightingEffect({
+  surfaceScale,
+  lightingColor,
+  diffuseConstant,
+  kernelUnitLength
+})
 ```
 
-***very complicated, just check out the W3 doc***
+_**very complicated, just check out the W3 doc**_
 
 ### DisplacementMap
 
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feDisplacementMapElement)
 
 ```javascript
-filter.displacementMap(in1, in2, scale, xChannelSelector, yChannelSelector);
+filter.displacementMap(in1, in2, scale, xChannelSelector, yChannelSelector)
 //or
-new SVG.DisplacementMapEffect({in1, in2, scale, xChannelSelector, yChannelSelector});
+new SVG.DisplacementMapEffect({
+  in1,
+  in2,
+  scale,
+  xChannelSelector,
+  yChannelSelector
+})
 ```
 
-***very complicated, just check out the W3 doc***
+_**very complicated, just check out the W3 doc**_
 
 **chaining** when this effect is called right after another effect, for example:
+
 ```javascript
-filter.offset(20,50).displacementMap(filter.$source,2)
+filter.offset(20, 50).displacementMap(filter.$source, 2)
 ```
+
 the first input is set to the `offset` effect and the second input is set to `filter.$source` or what ever was passed as the first argument.<br>
 also the second argument becomes the **scale**, and the third argument is the **xChannelSelector** and so on
 
@@ -582,9 +631,9 @@ also the second argument becomes the **scale**, and the third argument is the **
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feFloodElement)
 
 ```javascript
-filter.flood(color,opacity);
+filter.flood(color, opacity)
 //or
-new SVG.FloodEffect(color,opacity);
+new SVG.FloodEffect(color, opacity)
 ```
 
 - **color**: a named or hex color in string format
@@ -595,9 +644,9 @@ new SVG.FloodEffect(color,opacity);
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feGaussianBlurElement)
 
 ```javascript
-filter.gaussianBlur(x, y);
+filter.gaussianBlur(x, y)
 //or
-new SVG.GaussianBlurEffect({x, y});
+new SVG.GaussianBlurEffect({ x, y })
 ```
 
 - **x**: blur on the X
@@ -608,9 +657,9 @@ new SVG.GaussianBlurEffect({x, y});
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feImageElement)
 
 ```javascript
-filter.image(src);
+filter.image(src)
 //or
-new SVG.ImageEffect({src});
+new SVG.ImageEffect({ src })
 ```
 
 ### Merge
@@ -618,9 +667,9 @@ new SVG.ImageEffect({src});
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feMergeElement)
 
 ```javascript
-filter.merge();
+filter.merge()
 //or
-new SVG.MergeEffect();
+new SVG.MergeEffect()
 ```
 
 - **Array**: an Array of effects or effect results `filter.merge([effectOne,"result-two",another_effect])`
@@ -631,9 +680,9 @@ new SVG.MergeEffect();
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feMorphologyElement)
 
 ```javascript
-filter.morphology(operator, radius);
+filter.morphology(operator, radius)
 //or
-new SVG.MorphologyEffect({operator, radius});
+new SVG.MorphologyEffect({ operator, radius })
 ```
 
 - **operator**: "erode | dilate"
@@ -646,9 +695,9 @@ new SVG.MorphologyEffect({operator, radius});
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feOffsetElement)
 
 ```javascript
-filter.offset(x, y);
+filter.offset(x, y)
 //or
-new SVG.OffsetEffect({x, y});
+new SVG.OffsetEffect({ x, y })
 ```
 
 - **x**: move on the X
@@ -659,33 +708,45 @@ new SVG.OffsetEffect({x, y});
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feSpecularLightingElement)
 
 ```javascript
-filter.specularLighting(surfaceScale, lightingColor, diffuseConstant, specularExponent, kernelUnitLength);
+filter.specularLighting(
+  surfaceScale,
+  lightingColor,
+  diffuseConstant,
+  specularExponent,
+  kernelUnitLength
+)
 //or
-new SVG.SpecularLightingEffect(surfaceScale, lightingColor, diffuseConstant, specularExponent, kernelUnitLength);
+new SVG.SpecularLightingEffect(
+  surfaceScale,
+  lightingColor,
+  diffuseConstant,
+  specularExponent,
+  kernelUnitLength
+)
 ```
 
-***very complicated, just check out the W3 doc***
+_**very complicated, just check out the W3 doc**_
 
 ### Tile
 
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feTileElement)
 
 ```javascript
-filter.tile();
+filter.tile()
 //or
-new SVG.TileEffect();
+new SVG.TileEffect()
 ```
 
-***no arguments, but if you want to find out what it does check out the W3 doc***
+_**no arguments, but if you want to find out what it does check out the W3 doc**_
 
 ### Turbulence
 
 [W3 doc](https://www.w3.org/TR/SVG/filters.html#feTurbulenceElement)
 
 ```javascript
-filter.turbulence(baseFrequency, numOctaves, seed, stitchTiles, type);
+filter.turbulence(baseFrequency, numOctaves, seed, stitchTiles, type)
 //or
-new SVG.TurbulenceEffect({baseFrequency, numOctaves, seed, stitchTiles, type});
+new SVG.TurbulenceEffect({ baseFrequency, numOctaves, seed, stitchTiles, type })
 ```
 
-***very complicated, just check out the W3 doc***
+_**very complicated, just check out the W3 doc**_
